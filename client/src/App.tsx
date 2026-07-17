@@ -16,12 +16,14 @@ import IndustryPage from "./pages/IndustryPage";
 
 
 // Use hash-based routing when not served from a normal site root (e.g. the
-// standalone single-file HTML export opened via file:// or a deep path),
-// so kit navigation works without a server rewrite.
+// standalone single-file HTML export opened via file:// or a deep path, or
+// GitHub Pages project hosting under /<repo>/), so kit navigation works
+// without a server rewrite.
 const useHashRouting =
   typeof window !== "undefined" &&
   (window.location.protocol === "file:" ||
-    window.location.pathname.endsWith(".html"));
+    window.location.pathname.endsWith(".html") ||
+    window.location.hostname.endsWith(".github.io"));
 
 function Router() {
   return (
