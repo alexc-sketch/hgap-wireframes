@@ -90,7 +90,7 @@ const PROCESSED = new WeakSet<Text>();
 
 /** Routes that show REAL English copy even when lorem mode is on
  *  (client request: product list + product page review with real data/copy). */
-const REAL_COPY_ROUTES = ["/product-list", "/product-page"];
+const REAL_COPY_ROUTES = ["/product-list", "/product-page", "/homepage"];
 
 function isRealCopyRoute(): boolean {
   // support both hash routing (GitHub Pages) and path routing (dev preview)
