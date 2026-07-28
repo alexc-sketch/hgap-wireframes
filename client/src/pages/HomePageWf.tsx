@@ -72,11 +72,12 @@ const NOTES: NoteDef[] = [
   { n: 2, title: "Hero carousel: product category focus", body: "Functional in this prototype: 4 slides, auto-advance every 6s, pauses on hover, arrows and dot indicators. Slide 1 carries the value proposition; slides 2 to 4 each promote a top product category with real SKU counts from the client's product list. DEV NOTE: build with Elementor Pro's native Slides widget, NOT Slider Revolution (performance drag on the current site); first slide loads eagerly for LCP, respects prefers-reduced-motion, swipeable on mobile." },
   { n: 3, title: "Intent router", body: "Three self-selection doors modelled on Atlas Copco: 'I need a compressor', 'I need service or parts' and 'I run a rental fleet'. The third door targets product rental companies buying portable compressors for their own fleets (HGAP does not offer rentals)." },
   { n: 4, title: "Product range", body: "The six agreed Products menu categories link into their category landing pages, the primary SEO landing routes. Counts are real SKU counts from ProductList-Marketing.xlsx. Stationary/Portable and Oil Flooded/Oil Free are two crossing taxonomies: a product appears in one of each pair without page duplication. Accessories SKU data still to be supplied." },
-  { n: 5, title: "Our Brands", body: "HGAP's differentiator is the three-brand portfolio (Sullair, Champion, Hitachi) under Hitachi Group ownership. Each tile links to a brand page; Bebicon and Air-One roll up under Hitachi." },
+  { n: 5, title: "Our Brands", body: "HGAP's differentiator is the five-brand portfolio: Hitachi, Sullair, Champion, Bebicon and Air-One, all under Hitachi Group ownership. Each tile links to its own brand page." },
   { n: 6, title: "Dedicated AirLinx section", body: "Client-requested dedicated section for the AirLinx IoT platform: live dashboard placeholder, three capability tiles (live performance, fault alerts, energy reporting) and the real figure of 112 AirLinx-ready SKUs in the current catalogue. Competitor benchmark: CompAir gives iConn equivalent homepage prominence." },
   { n: 7, title: "Industries served", body: "Six industry tiles from the sitemap (Agriculture, Construction, Food & Beverage, Manufacturing, Mining, Pharmaceutical) route buyers by application and power internal linking to the industry pages." },
   { n: 8, title: "Insights (blogs)", body: "Blog section is titled Insights per the sitemap. Three latest articles feed SEO freshness and demonstrate expertise. Positioned before the final CTA per the agreed component order." },
   { n: 9, title: "Final CTA (centred)", body: "Single centred conversion moment closing the page, using the live site's own H2 ('Let us help you find the right compressor for your needs') and phone 1300 266 773." },
+  { n: 11, title: "Mailing list signup", body: "Client-requested newsletter block above the footer. Fields: first name, email, optional industry select, consent checkbox. DEV NOTE: wire to the email platform (e.g. HubSpot or Mailchimp) with double opt-in; success and error states required; sits after the final CTA and before the footer per the agreed component order." },
   { n: 10, title: "Hitachi brand system applied", body: "Hitachi Red #b1000e for primary CTAs and active states only; HITACHI mark leads the header lockup with the 'Global Air Power' wordmark subordinate and never red; sharp geometry (radius 0). CTA labels kept identical to the live site. Mobile-first: carousel swipeable, sections stack single-column, tap targets at least 44px." },
 ];
 
@@ -247,17 +248,19 @@ export default function HomePageWf() {
           <div className="flex items-end justify-between mb-5">
             <div>
               <p className="wf-kicker mb-1">Our brands</p>
-              <h3 className="font-bold text-xl">Three brands, one standard of support</h3>
+              <h3 className="font-bold text-xl">Five brands, one standard of support</h3>
             </div>
           </div>
-          <div className="grid sm:grid-cols-3 gap-4">
+          <div className="grid sm:grid-cols-2 lg:grid-cols-5 gap-4">
             {[
+              ["Hitachi", "Oil free scroll and screw technology for precision and clean-air applications."],
               ["Sullair", "Industrial and portable air compressors with legendary airend durability since 1965."],
               ["Champion", "Reliable workshop and light-industrial compressors built for Australian trades."],
-              ["Hitachi", "Oil free scroll and screw technology for precision and clean-air applications."],
+              ["Bebicon", "Compact reciprocating piston compressors for workshop and light duty air."],
+              ["Air-One", "Entry-level rotary screw packages for small business and trade use."],
             ].map(([b, s]) => (
               <div key={b} className="border p-5 group hover:bg-secondary transition-colors duration-150">
-                <ImgPh label={`${b} logo`} className="h-12 w-32 mb-4" />
+                <ImgPh label={`${b} logo`} className="h-12 w-full max-w-32 mb-4" />
                 <p className="font-semibold">{b}</p>
                 <p className="text-sm text-muted-foreground mt-1">{s}</p>
                 <span className="inline-flex items-center gap-2 font-mono text-[11px] uppercase tracking-wide mt-3 text-primary">
@@ -266,9 +269,6 @@ export default function HomePageWf() {
               </div>
             ))}
           </div>
-          <p className="font-mono text-[10px] uppercase text-muted-foreground mt-4">
-            Also in the family: Bebicon piston and Air-One, rolled up under Hitachi.
-          </p>
         </section>
 
         {/* Dedicated AirLinx section */}
@@ -434,6 +434,67 @@ export default function HomePageWf() {
             <span className="border border-background/40 text-sm font-medium px-6 py-3.5 min-h-[44px] inline-flex items-center justify-center">
               Call 1300 266 773
             </span>
+          </div>
+        </section>
+
+        {/* Mailing list signup, above the footer */}
+        <section className="relative border-b bg-secondary/60 px-4 lg:px-8 py-10">
+          <Note n={11} />
+          <div className="max-w-5xl mx-auto grid lg:grid-cols-2 gap-8 items-center">
+            <div>
+              <p className="wf-kicker mb-1">Stay in the loop</p>
+              <h3 className="font-bold text-xl">Subscribe to our mailing list</h3>
+              <p className="text-sm text-muted-foreground mt-2 max-w-md">
+                Compressed air tips, new product releases and service offers
+                from the HGAP team. No spam, unsubscribe any time.
+              </p>
+            </div>
+            <form
+              className="grid gap-3"
+              onSubmit={(e) => e.preventDefault()}
+              aria-label="Mailing list signup"
+            >
+              <div className="grid sm:grid-cols-2 gap-3">
+                <input
+                  type="text"
+                  placeholder="First name"
+                  className="border bg-card px-4 py-3 text-sm min-h-[44px] w-full focus:outline-none focus:ring-2 focus:ring-primary"
+                />
+                <input
+                  type="email"
+                  placeholder="Work email address"
+                  className="border bg-card px-4 py-3 text-sm min-h-[44px] w-full focus:outline-none focus:ring-2 focus:ring-primary"
+                />
+              </div>
+              <select
+                defaultValue=""
+                className="border bg-card px-4 py-3 text-sm min-h-[44px] w-full text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary"
+              >
+                <option value="" disabled>
+                  Industry (optional)
+                </option>
+                <option>Agriculture</option>
+                <option>Construction</option>
+                <option>Food &amp; Beverage</option>
+                <option>Manufacturing</option>
+                <option>Mining</option>
+                <option>Pharmaceutical</option>
+                <option>Other</option>
+              </select>
+              <label className="flex items-start gap-2 text-[12px] text-muted-foreground">
+                <input type="checkbox" className="mt-0.5" />
+                <span>
+                  I agree to receive marketing emails from Hitachi Global Air
+                  Power and understand I can unsubscribe at any time.
+                </span>
+              </label>
+              <button
+                type="submit"
+                className="bg-primary text-primary-foreground font-bold text-sm px-6 py-3.5 min-h-[44px] justify-self-start hover:opacity-90 active:scale-[0.97] transition duration-150"
+              >
+                SUBSCRIBE
+              </button>
+            </form>
           </div>
         </section>
 

@@ -56,9 +56,11 @@ const NAV: NavEntry[] = [
       {
         heading: "Our Brands",
         links: [
+          { label: "Hitachi", meta: "Oil free technology" },
           { label: "Sullair", meta: "Industrial and portable" },
           { label: "Champion", meta: "Workshop and trade" },
-          { label: "Hitachi", meta: "Oil free technology" },
+          { label: "Bebicon", meta: "Piston compressors" },
+          { label: "Air-One", meta: "Entry-level screw" },
         ],
       },
     ],
