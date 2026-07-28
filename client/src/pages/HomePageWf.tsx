@@ -77,7 +77,7 @@ const NOTES: NoteDef[] = [
   { n: 7, title: "Industries served", body: "Six industry tiles from the sitemap (Agriculture, Construction, Food & Beverage, Manufacturing, Mining, Pharmaceutical) route buyers by application and power internal linking to the industry pages." },
   { n: 8, title: "Insights (blogs)", body: "Blog section is titled Insights per the sitemap. Three latest articles feed SEO freshness and demonstrate expertise. Positioned before the final CTA per the agreed component order." },
   { n: 9, title: "Final CTA (centred)", body: "Single centred conversion moment closing the page, using the live site's own H2 ('Let us help you find the right compressor for your needs') and phone 1300 266 773." },
-  { n: 11, title: "Mailing list signup", body: "Client-requested newsletter block above the footer. Fields: first name, email, optional industry select, consent checkbox. DEV NOTE: wire to the email platform (e.g. HubSpot or Mailchimp) with double opt-in; success and error states required; sits after the final CTA and before the footer per the agreed component order." },
+  { n: 11, title: "Mailing list signup (global)", body: "Minimal newsletter strip: one email field plus SUBSCRIBE, rendered as a global element directly above the footer on every template. DEV NOTE: build once as a theme part (footer template) wired to the email platform with double opt-in; keep the single-field pattern and enrich profiles later via preference centre." },
   { n: 10, title: "Hitachi brand system applied", body: "Hitachi Red #b1000e for primary CTAs and active states only; HITACHI mark leads the header lockup with the 'Global Air Power' wordmark subordinate and never red; sharp geometry (radius 0). CTA labels kept identical to the live site. Mobile-first: carousel swipeable, sections stack single-column, tap targets at least 44px." },
 ];
 
@@ -353,26 +353,9 @@ export default function HomePageWf() {
           </div>
         </section>
 
-        {/* Social proof */}
+        {/* Trust stats band */}
         <section className="relative border-b px-4 lg:px-8 py-10 bg-card">
-          <div className="grid lg:grid-cols-[1fr_300px] gap-8 items-center">
-            <div className="border-l-4 border-primary pl-5">
-              <p className="text-lg font-medium leading-relaxed max-w-2xl">
-                Case-study pull-quote placeholder: the Dulux Merrifield
-                preventative maintenance partnership or the ITO EN nitrogen
-                generation install.
-              </p>
-              <p className="font-mono text-[11px] text-muted-foreground mt-3">
-                Client name, role · from the /insights/ case-study library
-              </p>
-            </div>
-            <div className="grid grid-cols-3 gap-2">
-              {Array.from({ length: 6 }).map((_, i) => (
-                <ImgPh key={i} label="Client" className="h-12" />
-              ))}
-            </div>
-          </div>
-          <div className="grid grid-cols-2 lg:grid-cols-4 border divide-x bg-secondary/30 mt-8 text-center">
+          <div className="grid grid-cols-2 lg:grid-cols-4 border divide-x bg-secondary/30 text-center">
             {[
               ["50+", "years in Australia"],
               ["6", "branches nationwide"],
@@ -400,7 +383,7 @@ export default function HomePageWf() {
           <div className="grid sm:grid-cols-3 gap-4">
             {[
               ["Insights", "How does an air compressor work?"],
-              ["Case Study", "Preventative maintenance at Dulux Merrifield"],
+              ["Guide", "Choosing between fixed speed and VSD compressors"],
               ["News", "HGAP named in Hitachi global service awards"],
             ].map(([tag, t]) => (
               <div key={t} className="border bg-card hover:bg-secondary/50 transition-colors duration-150">
@@ -437,68 +420,12 @@ export default function HomePageWf() {
           </div>
         </section>
 
-        {/* Mailing list signup, above the footer */}
-        <section className="relative border-b bg-secondary/60 px-4 lg:px-8 py-10">
+        {/* Newsletter is now a minimal GLOBAL element rendered inside WfFooter
+            on every template (annotation 11). */}
+        <div className="relative">
           <Note n={11} />
-          <div className="max-w-5xl mx-auto grid lg:grid-cols-2 gap-8 items-center">
-            <div>
-              <p className="wf-kicker mb-1">Stay in the loop</p>
-              <h3 className="font-bold text-xl">Subscribe to our mailing list</h3>
-              <p className="text-sm text-muted-foreground mt-2 max-w-md">
-                Compressed air tips, new product releases and service offers
-                from the HGAP team. No spam, unsubscribe any time.
-              </p>
-            </div>
-            <form
-              className="grid gap-3"
-              onSubmit={(e) => e.preventDefault()}
-              aria-label="Mailing list signup"
-            >
-              <div className="grid sm:grid-cols-2 gap-3">
-                <input
-                  type="text"
-                  placeholder="First name"
-                  className="border bg-card px-4 py-3 text-sm min-h-[44px] w-full focus:outline-none focus:ring-2 focus:ring-primary"
-                />
-                <input
-                  type="email"
-                  placeholder="Work email address"
-                  className="border bg-card px-4 py-3 text-sm min-h-[44px] w-full focus:outline-none focus:ring-2 focus:ring-primary"
-                />
-              </div>
-              <select
-                defaultValue=""
-                className="border bg-card px-4 py-3 text-sm min-h-[44px] w-full text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary"
-              >
-                <option value="" disabled>
-                  Industry (optional)
-                </option>
-                <option>Agriculture</option>
-                <option>Construction</option>
-                <option>Food &amp; Beverage</option>
-                <option>Manufacturing</option>
-                <option>Mining</option>
-                <option>Pharmaceutical</option>
-                <option>Other</option>
-              </select>
-              <label className="flex items-start gap-2 text-[12px] text-muted-foreground">
-                <input type="checkbox" className="mt-0.5" />
-                <span>
-                  I agree to receive marketing emails from Hitachi Global Air
-                  Power and understand I can unsubscribe at any time.
-                </span>
-              </label>
-              <button
-                type="submit"
-                className="bg-primary text-primary-foreground font-bold text-sm px-6 py-3.5 min-h-[44px] justify-self-start hover:opacity-90 active:scale-[0.97] transition duration-150"
-              >
-                SUBSCRIBE
-              </button>
-            </form>
-          </div>
-        </section>
-
-        <WfFooter />
+          <WfFooter />
+        </div>
       </div>
     </KitShell>
   );

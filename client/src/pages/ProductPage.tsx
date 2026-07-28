@@ -22,21 +22,19 @@ import {
   FileText,
   MapPin,
   Phone,
-  Quote,
   ShieldCheck,
 } from "lucide-react";
 
 const NOTES: NoteDef[] = [
   { n: 1, title: "Breadcrumb from clean taxonomy", body: "Home > Products > Category > Series > Model - generated automatically from the new Product post type hierarchy using the agreed categories (Stationary / Portable / Oil Flooded / Oil Free). This model is Stationary + Oil Flooded; the breadcrumb shows its primary category and cross-lists in Oil Flooded. Today's flat root-level URLs cannot do this." },
   { n: 2, title: "Gallery from media library", body: "Main image + thumbnails drawn from the 1,395-attachment media library. Alt text migrated for SEO." },
-  { n: 3, title: "Spec snapshot + conversion stack", body: "The four numbers a buyer checks first (power, flow, pressure, noise), then a clear action hierarchy: Request a Quote (primary) → Download Brochure (lead magnet) → Find a Branch (offline path)." },
+  { n: 3, title: "Spec snapshot + conversion stack", body: "The four numbers a buyer checks first (power, flow, pressure, noise), then a clear action hierarchy: Request a Quote (primary, scrolls to the quote form) → Download Brochure (lead magnet) → Find a Branch (offline path). Request a Quote is the CTA on every template." },
   { n: 4, title: "Anchored section tabs", body: "Tab bar scrolls the page to each section (scroll effect). Not sticky - keeps the header area calm and predictable." },
-  { n: 5, title: "Full specification table", body: "Powered by structured custom fields (JetEngine meta fields) populated directly from the client's spec sheet - every column here is a real field in ProductList-Marketing.xlsx (30 spec columns per SKU). The table shows the model plus its series siblings and the fixed-speed vs VSD variants, so pressure-variant SKUs live as table rows rather than separate pages (258 SKUs → ~150 model pages). DEV NOTE: render once in an Elementor Pro Theme Builder single template using dynamic tags, so all product pages share one maintained layout." },
+  { n: 5, title: "Full specification table", body: "Powered by structured custom fields populated directly from the client's spec sheet - every column here is a real field in ProductList-Marketing.xlsx (30 spec columns per SKU). The table shows the model plus its series siblings and the fixed-speed vs VSD variants, so pressure-variant SKUs live as table rows rather than separate pages (258 SKUs → ~150 model pages). DEV NOTE: model as ACF field groups on a product post type, or WooCommerce products with ACF-extended attributes (catalogue mode, no cart); render once in a single-product template with dynamic tags so all product pages share one maintained layout." },
   { n: 6, title: "Applications → industry pages", body: "Chips link to the 6 industry landing pages, strengthening internal linking and helping buyers self-qualify." },
-  { n: 7, title: "Social proof", body: "Pull-quote from the 31 existing case studies plus client logo strip. Real proof, no fabricated testimonials." },
-  { n: 8, title: "Related products by taxonomy", body: "Auto-queried from the same series/type - zero manual curation needed when new models are added." },
-  { n: 9, title: "Salesforce-integrated enquiry form", body: "Form posts to CRM and redirects to a /thank-you/ page so ad and analytics conversion tracking keeps working. DEV NOTE: two options - (a) rebuild in Elementor Pro Forms with a webhook action to Salesforce Web-to-Lead (fewer plugins, styled natively in the builder), or (b) keep the existing Ninja Forms + Salesforce addon and restyle it. Prefer (a) unless the Salesforce field mapping proves complex; either way, re-test the /thank-you/ redirect and hidden UTM/GCLID fields after migration." },
-  { n: 10, title: "Sticky mobile quote bar", body: "MOBILE-FIRST: on screens below lg, a bar fixed to the bottom of the viewport keeps 'Request a Quote' + 'Call' one thumb-tap away throughout the long spec page - B2B buyers on site visits often check specs from a phone next to the machine. ≥44px tap targets; hidden on desktop where the right-column conversion stack stays visible. Uses Hitachi Red for the primary action only." },
+  { n: 8, title: "Related products by taxonomy", body: "Positioned below the quote form per client direction: the page drives to the quote request first, then offers sideways moves within the same series/type. Auto-queried by taxonomy (native WooCommerce related products or an ACF taxonomy query) - zero manual curation needed when new models are added." },
+  { n: 9, title: "Salesforce-integrated quote form", body: "Request a Quote form posts to CRM and redirects to a /thank-you/ page so ad and analytics conversion tracking keeps working. The product name pre-fills from the ACF/WooCommerce product context. DEV NOTE: two options - (a) rebuild in Elementor Pro Forms with a webhook action to Salesforce Web-to-Lead (fewer plugins, styled natively in the builder), or (b) keep the existing Ninja Forms + Salesforce addon and restyle it. Prefer (a) unless the Salesforce field mapping proves complex; either way, re-test the /thank-you/ redirect and hidden UTM/GCLID fields after migration." },
+  { n: 10, title: "Sticky mobile quote bar", body: "MOBILE-FIRST: on screens below lg, a bar fixed to the bottom of the viewport keeps 'Request a Quote' + 'Call' one thumb-tap away throughout the long spec page - B2B buyers on site visits often check specs from a phone next to the machine. At least 44px tap targets; hidden on desktop where the right-column conversion stack stays visible. Uses Hitachi Red for the primary action only." },
 ];
 
 /* Real values from ProductList-Marketing.xlsx - the three VOC 90 V pressure-variant
@@ -68,7 +66,7 @@ export default function ProductPage() {
       <SheetTitle
         code="Template 02 / Single Product - /products/stationary/vocv-45-90/voc-90-v/"
         title="Single Product Page"
-        desc="Responsive wireframe using a real model (Champion VOC 90 V, part 1004-3878) from the client's product list. Section tabs scroll to their anchors; on mobile a sticky quote bar keeps the CTA one tap away."
+        desc="Responsive wireframe using a real model (Champion VOC 90 V, part 1004-3878) from the client's product list. Section tabs scroll to their anchors; on mobile a sticky quote bar keeps the CTA one tap away. Related products sit below the quote form."
       />
 
       <div className="wf-sheet overflow-hidden">
@@ -293,30 +291,39 @@ export default function ProductPage() {
           </div>
         </section>
 
-        {/* Social proof */}
-        <section className="relative border-t px-4 lg:px-8 py-10 bg-card">
-          <Note n={7} />
-          <div className="grid lg:grid-cols-[1fr_320px] gap-8 items-center">
-            <div className="border-l-4 border-primary pl-5">
-              <Quote className="w-5 h-5 text-muted-foreground mb-2" />
-              <p className="text-lg font-medium leading-relaxed">
-                Pull-quote from an existing HGAP case study - e.g. the Dulux
-                Merrifield preventative maintenance story or ITO EN nitrogen
-                generation install.
-              </p>
-              <p className="font-mono text-[11px] text-muted-foreground mt-3">
-                - Source: /insights/ case study library (31 available)
-              </p>
-            </div>
-            <div className="grid grid-cols-3 gap-2">
-              {["Client", "Client", "Client", "Client", "Client", "Client"].map((c, i) => (
-                <ImgPh key={i} label={c} className="h-12" />
+        {/* Enquiry form */}
+        <section className="relative border-t px-4 lg:px-8 py-12 bg-card">
+          <Note n={9} />
+          <div className="max-w-2xl mx-auto">
+            <h3 className="font-bold text-2xl text-center">
+              Request a quote for the VOC 90 V
+            </h3>
+            <p className="text-sm text-muted-foreground text-center mt-2">
+              Form pre-fills the product name. Submissions sync to Salesforce and
+              redirect to a thank-you page for conversion tracking.
+            </p>
+            <div className="grid sm:grid-cols-2 gap-3 mt-6">
+              {["Full name*", "Company", "Email*", "Phone*", "Postcode*", "Industry (select)"].map((f) => (
+                <div key={f} className="border px-3 py-3 text-[13px] text-muted-foreground bg-secondary/50">
+                  {f}
+                </div>
               ))}
+            </div>
+            <div className="border px-3 py-3 text-[13px] text-muted-foreground bg-secondary/50 mt-3 h-20">
+              Message / requirements
+            </div>
+            <div className="text-center mt-5">
+              <span className="inline-block bg-primary text-primary-foreground font-semibold text-sm px-10 py-3.5">
+                Request a Quote →
+              </span>
+              <p className="font-mono text-[10px] text-muted-foreground mt-2">
+                → redirects to /thank-you-voc/ (tracked conversion)
+              </p>
             </div>
           </div>
         </section>
 
-        {/* Related products */}
+        {/* Related products - below the enquiry form per client direction */}
         <section id="wf-related" className="relative border-t px-4 lg:px-8 py-10 bg-secondary/40 scroll-mt-16">
           <Note n={8} />
           <div className="flex items-end justify-between mb-4">
@@ -338,38 +345,6 @@ export default function ProductPage() {
                 </div>
               </div>
             ))}
-          </div>
-        </section>
-
-        {/* Enquiry form */}
-        <section className="relative border-t px-4 lg:px-8 py-12 bg-card">
-          <Note n={9} />
-          <div className="max-w-2xl mx-auto">
-            <h3 className="font-bold text-2xl text-center">
-              Get a quote for the VOC 90 V
-            </h3>
-            <p className="text-sm text-muted-foreground text-center mt-2">
-              Form pre-fills the product name. Submissions sync to Salesforce and
-              redirect to a thank-you page for conversion tracking.
-            </p>
-            <div className="grid sm:grid-cols-2 gap-3 mt-6">
-              {["Full name*", "Company", "Email*", "Phone*", "Postcode*", "Industry (select)"].map((f) => (
-                <div key={f} className="border px-3 py-3 text-[13px] text-muted-foreground bg-secondary/50">
-                  {f}
-                </div>
-              ))}
-            </div>
-            <div className="border px-3 py-3 text-[13px] text-muted-foreground bg-secondary/50 mt-3 h-20">
-              Message / requirements
-            </div>
-            <div className="text-center mt-5">
-              <span className="inline-block bg-primary text-primary-foreground font-semibold text-sm px-10 py-3.5">
-                Submit enquiry →
-              </span>
-              <p className="font-mono text-[10px] text-muted-foreground mt-2">
-                → redirects to /thank-you-voc/ (tracked conversion)
-              </p>
-            </div>
           </div>
         </section>
 

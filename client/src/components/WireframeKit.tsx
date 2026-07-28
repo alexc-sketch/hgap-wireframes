@@ -218,6 +218,39 @@ export function WfHeader({ active }: { active?: "products" | "industries" }) {
   );
 }
 
+/* Minimal global newsletter strip: rendered above the footer on every template.
+   One row: label + email field + SUBSCRIBE. DEV NOTE: single global instance
+   (theme part), wired to the email platform with double opt-in. */
+export function WfNewsletter() {
+  return (
+    <section className="border-t bg-secondary/60 px-4 lg:px-8 py-6">
+      <div className="max-w-5xl mx-auto flex flex-col sm:flex-row sm:items-center gap-3 sm:gap-6">
+        <div className="flex-none">
+          <p className="font-semibold text-[15px]">Subscribe to our mailing list</p>
+          <p className="text-[12px] text-muted-foreground">Product news and service offers. Unsubscribe any time.</p>
+        </div>
+        <form
+          className="flex flex-1 gap-2"
+          onSubmit={(e) => e.preventDefault()}
+          aria-label="Mailing list signup"
+        >
+          <input
+            type="email"
+            placeholder="Email address"
+            className="border bg-card px-4 py-3 text-sm min-h-[44px] flex-1 focus:outline-none focus:ring-2 focus:ring-primary"
+          />
+          <button
+            type="submit"
+            className="bg-primary text-primary-foreground font-bold text-sm px-6 min-h-[44px] hover:opacity-90 active:scale-[0.97] transition duration-150"
+          >
+            SUBSCRIBE
+          </button>
+        </form>
+      </div>
+    </section>
+  );
+}
+
 export function WfFooter() {
   const cols: Array<[string, string[]]> = [
     ["Products", ["All Products", "Stationary Air Compressors", "Portable Air Compressors", "Oil Flooded", "Oil Free Air Compressors", "Air Compressor Accessories"]],
@@ -225,6 +258,8 @@ export function WfFooter() {
     ["Support", ["Services and Parts", "Industries", "Airlinx™ Remote Monitoring", "Contact Us"]],
   ];
   return (
+    <>
+    <WfNewsletter />
     <footer data-no-lorem className="bg-[#111] text-background/85 px-4 lg:px-8 py-10">
       <div className="grid md:grid-cols-4 gap-8">
         <div>
@@ -259,6 +294,7 @@ export function WfFooter() {
         <span>Privacy · Terms · Sitemap · Hitachi Group links</span>
       </div>
     </footer>
+    </>
   );
 }
 
