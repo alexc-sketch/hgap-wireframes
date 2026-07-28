@@ -39,18 +39,23 @@ const NOTES: NoteDef[] = [
   { n: 10, title: "Sticky mobile quote bar", body: "MOBILE-FIRST: on screens below lg, a bar fixed to the bottom of the viewport keeps 'Request a Quote' + 'Call' one thumb-tap away throughout the long spec page — B2B buyers on site visits often check specs from a phone next to the machine. ≥44px tap targets; hidden on desktop where the right-column conversion stack stays visible. Uses Hitachi Red for the primary action only." },
 ];
 
-/* Real values from ProductList-Marketing.xlsx — VOC 90 (fixed) vs VOC 90 V (VSD) */
-const SPECS: Array<[string, string, string, string]> = [
-  ["Model", "VOC 75 V", "VOC 90 V (this page)", "VOC 90 (fixed speed)"],
-  ["Part number", "1004-3877", "1004-3878", "1004-3874"],
-  ["Motor power (kW / HP)", "75 / 100", "90 / 125", "90 / 125"],
-  ["Free air delivery (cfm)", "492", "591", "591"],
-  ["Max pressure (bar)", "7.5", "7.5", "7.5"],
-  ["Control", "VSD", "VSD", "Spiral Valve"],
-  ["Noise level dB(A)", "72", "73", "73"],
-  ["Dimensions L×W×H (mm)", "1995×1300×1970", "1995×1300×1970", "1995×1300×1970"],
-  ["Weight (kg)", "1,800", "1,950", "1,850"],
-  ["Connectivity", "AirLinx", "AirLinx", "AirLinx"],
+/* Real values from ProductList-Marketing.xlsx — the three VOC 90 V pressure-variant
+   SKUs (rows in one table, not separate pages) plus the fixed-speed VOC 90 sibling. */
+const SPECS: Array<[string, string, string, string, string]> = [
+  ["Model / variant", "VOC 90 V · 7.5 bar (this page)", "VOC 90 V · 10 bar", "VOC 90 V · 13 bar", "VOC 90 (fixed speed)"],
+  ["Part number", "1004-3878", "1004-3888", "1004-3879", "1004-3885 / -3887"],
+  ["Motor power (kW / HP)", "90 / 125", "90 / 125", "90 / 125", "90 / 125"],
+  ["Free air delivery (L/s · cfm)", "279 · 591", "239 · 505", "206 · 437", "206–279 · 437–591"],
+  ["Max pressure (bar)", "7.5", "10", "13", "7.5 / 10 / 13"],
+  ["Capacity control", "VSD", "VSD", "VSD", "Spiral Valve"],
+  ["Start type", "VSD", "VSD", "VSD", "Wye-Delta"],
+  ["IP rating / ambient", "IP54 · 50°C", "IP54 · 50°C", "IP54 · 50°C", "IP65 · 50°C"],
+  ["Noise level dB(A)", "73", "73", "73", "73"],
+  ["Dimensions L×W×H (mm)", "1995×1300×1970", "1995×1300×1970", "1995×1300×1970", "1995×1300×1970"],
+  ["Weight (kg)", "1,950", "1,950", "1,950", "1,850"],
+  ["Air outlet", "2\" BSP", "2\" BSP", "2\" BSP", "2\" BSP"],
+  ["Lubrication / cooling", "Sullube · Air cooled", "Sullube · Air cooled", "Sullube · Air cooled", "Sullube · Air cooled"],
+  ["Controller / connectivity", "Colour touchscreen · AirLinx", "Colour touchscreen · AirLinx", "Colour touchscreen · AirLinx", "Colour touchscreen · AirLinx"],
 ];
 
 function scrollToId(id: string) {
@@ -73,7 +78,7 @@ export default function ProductPage() {
         {/* Breadcrumb */}
         <div className="relative border-b px-4 lg:px-8 py-3 bg-secondary/60">
           <Note n={1} className="!-top-1" />
-          <p className="font-mono text-[11px] text-muted-foreground">
+          <p className="font-mono text-[11px] text-muted-foreground" data-no-lorem>
             Home <ChevronRight className="inline w-3 h-3" /> Products{" "}
             <ChevronRight className="inline w-3 h-3" /> Stationary Air Compressors{" "}
             <ChevronRight className="inline w-3 h-3" /> VOCV 45-90 Series{" "}
@@ -99,10 +104,10 @@ export default function ProductPage() {
           {/* Buy panel */}
           <div className="relative flex flex-col">
             <Note n={3} />
-            <span className="font-mono text-[10px] uppercase tracking-[0.14em] text-muted-foreground">
+            <span className="font-mono text-[10px] uppercase tracking-[0.14em] text-muted-foreground" data-no-lorem>
               Champion · VOCV 45-90 Series · Part 1004-3878
             </span>
-            <h2 className="font-bold text-3xl mt-1 leading-tight">
+            <h2 className="font-bold text-3xl mt-1 leading-tight" data-no-lorem>
               VOC 90 V Oil Flooded Screw Compressor
             </h2>
             <p className="text-sm text-muted-foreground mt-3 leading-relaxed">
@@ -110,7 +115,7 @@ export default function ProductPage() {
               cutting energy costs by up to 35% for variable-load plants.
             </p>
 
-            <div className="grid grid-cols-4 border divide-x text-center mt-5">
+            <div className="grid grid-cols-4 border divide-x text-center mt-5" data-no-lorem>
               {[
                 ["90", "kW power"],
                 ["591", "cfm FAD"],
@@ -201,7 +206,7 @@ export default function ProductPage() {
           <Note n={5} />
           <p className="wf-kicker mb-1">Specifications</p>
           <h3 className="font-bold text-xl mb-5">VOCV 45-90 series — full specification</h3>
-          <div className="overflow-x-auto">
+          <div className="overflow-x-auto" data-no-lorem>
             <table className="w-full border bg-card text-[13px]">
               <tbody>
                 {SPECS.map((row, ri) => (
@@ -211,7 +216,7 @@ export default function ProductPage() {
                         key={ci}
                         className={`border px-4 py-2.5 ${ci === 0 ? "font-medium w-56" : "text-center"} ${
                           ri === 0 ? "font-mono text-[11px] uppercase tracking-wide" : ""
-                        } ${ci === 2 && ri !== 0 ? "bg-primary/10 font-semibold" : ""}`}
+                        } ${ci === 1 && ri !== 0 ? "bg-primary/10 font-semibold" : ""}`}
                       >
                         {cell}
                       </td>
@@ -222,7 +227,7 @@ export default function ProductPage() {
             </table>
           </div>
           <p className="font-mono text-[10px] text-muted-foreground mt-2">
-            Highlighted column = model being viewed. All values from the client spec sheet (JetEngine meta fields); VSD and fixed-speed variants are rows in one table, not separate pages.
+            Highlighted column = SKU being viewed. All values are real, from ProductList-Marketing.xlsx (JetEngine meta fields); the three pressure-variant SKUs of the VOC 90 V live as columns in one table — not separate pages — with the fixed-speed sibling for comparison.
           </p>
         </section>
 
@@ -321,7 +326,7 @@ export default function ProductPage() {
             </div>
             <span className="font-mono text-[11px] underline">View series →</span>
           </div>
-          <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4">
+          <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4" data-no-lorem>
             {["VOC 45 V", "VOC 55 V", "VOC 75 V", "VOC 90 (fixed speed)"].map((m) => (
               <div key={m} className="bg-card border">
                 <ImgPh label="Product image" className="h-28" />
