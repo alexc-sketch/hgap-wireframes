@@ -88,7 +88,17 @@ export function loremize(text: string): string {
 
 const PROCESSED = new WeakSet<Text>();
 
+/** True when a node sits inside an element marked data-no-lorem
+ *  (navigation chrome such as the kit toolbar, site header nav, utility
+ *  bar and footer stay in English so reviewers can orient themselves). */
+function isExcluded(node: Node): boolean {
+  const el =
+    node.nodeType === 1 ? (node as Element) : node.parentElement;
+  return !!el && !!el.closest("[data-no-lorem]");
+}
+
 function walk(root: Node) {
+  if (isExcluded(root)) return;
   const walker = document.createTreeWalker(root, NodeFilter.SHOW_TEXT, {
     acceptNode(node) {
       const p = node.parentElement;
@@ -96,6 +106,7 @@ function walk(root: Node) {
       const tag = p.tagName;
       if (tag === "SCRIPT" || tag === "STYLE" || tag === "NOSCRIPT")
         return NodeFilter.FILTER_REJECT;
+      if (p.closest("[data-no-lorem]")) return NodeFilter.FILTER_REJECT;
       if (!node.nodeValue || !node.nodeValue.trim())
         return NodeFilter.FILTER_REJECT;
       return NodeFilter.FILTER_ACCEPT;
@@ -144,6 +155,7 @@ export function initLoremMode() {
         m.addedNodes.forEach((node) => walk(node));
       } else if (m.type === "characterData" && m.target.nodeType === 3) {
         const t = m.target as Text;
+        if (isExcluded(t)) continue;
         if (!PROCESSED.has(t)) {
           t.nodeValue = loremize(t.nodeValue || "");
           PROCESSED.add(t);

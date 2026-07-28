@@ -60,8 +60,8 @@ export function KitShell({
   return (
     <NotesCtx.Provider value={{ show: showNotes }}>
       <div className="min-h-screen blueprint-bg">
-        {/* Kit toolbar */}
-        <div className="sticky top-0 z-50 bg-[oklch(0.22_0.005_90)] text-[oklch(0.9_0.002_90)]">
+        {/* Kit toolbar — navigation chrome, kept in English in lorem mode */}
+        <div data-no-lorem className="sticky top-0 z-50 bg-[oklch(0.22_0.005_90)] text-[oklch(0.9_0.002_90)]">
           <div className="flex items-center gap-0 h-11 px-4">
             <span className="font-mono text-[11px] font-semibold tracking-[0.14em] uppercase whitespace-nowrap">
               HGAP / Wireframe Kit v2.0 · Branded
@@ -146,7 +146,7 @@ export function KitShell({
 
 export function WfUtilityBar() {
   return (
-    <div className="flex items-center justify-between px-4 lg:px-8 h-9 bg-[#2d2d2d] text-white/80 text-[11px]">
+    <div data-no-lorem className="flex items-center justify-between px-4 lg:px-8 h-9 bg-[#2d2d2d] text-white/80 text-[11px]">
       <span className="flex items-center gap-1.5">
         <span className="hitachi-mark text-[12px] !text-white">HITACHI</span>
         <span className="text-white/50">Inspire the Next · Group corporate strip</span>
@@ -176,7 +176,7 @@ export function WfHeader({ active }: { active?: "products" | "industries" }) {
   const activeLabel =
     active === "products" ? "Products" : active === "industries" ? "Industries" : null;
   return (
-    <header className="relative border-b bg-card sticky top-11 z-40">
+    <header data-no-lorem className="relative border-b bg-card sticky top-11 z-40">
       <div className="flex items-center gap-4 px-4 lg:px-8 h-16 min-h-[64px]">
         {/* Brand lockup: HITACHI mark leads (red), wordmark subordinate (never red) */}
         <div className="flex flex-col justify-center flex-none leading-none">
@@ -225,7 +225,7 @@ export function WfFooter() {
     ["Support", ["Services and Parts", "Industries", "Airlinx™ Remote Monitoring", "Contact Us"]],
   ];
   return (
-    <footer className="bg-[#111] text-background/85 px-4 lg:px-8 py-10">
+    <footer data-no-lorem className="bg-[#111] text-background/85 px-4 lg:px-8 py-10">
       <div className="grid md:grid-cols-4 gap-8">
         <div>
           {/* Reversed lockup: HITACHI red mark holds; wordmark white (never red) */}
