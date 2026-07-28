@@ -1,6 +1,6 @@
 /*
  * STYLE: Blueprint Studio wireframe, Hitachi-branded (ideas.md)
- * 02 — Single Product template (example: VOC 90 V, real data from ProductList-Marketing.xlsx).
+ * 02 - Single Product template (example: VOC 90 V, real data from ProductList-Marketing.xlsx).
  * Hitachi Red #b1000e CTAs; sticky mobile quote bar (mobile-first B2B).
  * Tab bar scrolls to anchored sections (scroll effect, NOT sticky).
  * Radius 0, grayscale, amber CTAs only. Final CTA centred.
@@ -27,25 +27,25 @@ import {
 } from "lucide-react";
 
 const NOTES: NoteDef[] = [
-  { n: 1, title: "Breadcrumb from clean taxonomy", body: "Home > Products > Category > Series > Model — generated automatically from the new Product post type hierarchy using the agreed categories (Stationary / Portable / Oil Flooded / Oil Free). This model is Stationary + Oil Flooded; the breadcrumb shows its primary category and cross-lists in Oil Flooded. Today's flat root-level URLs cannot do this." },
+  { n: 1, title: "Breadcrumb from clean taxonomy", body: "Home > Products > Category > Series > Model - generated automatically from the new Product post type hierarchy using the agreed categories (Stationary / Portable / Oil Flooded / Oil Free). This model is Stationary + Oil Flooded; the breadcrumb shows its primary category and cross-lists in Oil Flooded. Today's flat root-level URLs cannot do this." },
   { n: 2, title: "Gallery from media library", body: "Main image + thumbnails drawn from the 1,395-attachment media library. Alt text migrated for SEO." },
   { n: 3, title: "Spec snapshot + conversion stack", body: "The four numbers a buyer checks first (power, flow, pressure, noise), then a clear action hierarchy: Request a Quote (primary) → Download Brochure (lead magnet) → Find a Branch (offline path)." },
-  { n: 4, title: "Anchored section tabs", body: "Tab bar scrolls the page to each section (scroll effect). Not sticky — keeps the header area calm and predictable." },
-  { n: 5, title: "Full specification table", body: "Powered by structured custom fields (JetEngine meta fields) populated directly from the client's spec sheet — every column here is a real field in ProductList-Marketing.xlsx (30 spec columns per SKU). The table shows the model plus its series siblings and the fixed-speed vs VSD variants, so pressure-variant SKUs live as table rows rather than separate pages (258 SKUs → ~150 model pages). DEV NOTE: render once in an Elementor Pro Theme Builder single template using dynamic tags, so all product pages share one maintained layout." },
+  { n: 4, title: "Anchored section tabs", body: "Tab bar scrolls the page to each section (scroll effect). Not sticky - keeps the header area calm and predictable." },
+  { n: 5, title: "Full specification table", body: "Powered by structured custom fields (JetEngine meta fields) populated directly from the client's spec sheet - every column here is a real field in ProductList-Marketing.xlsx (30 spec columns per SKU). The table shows the model plus its series siblings and the fixed-speed vs VSD variants, so pressure-variant SKUs live as table rows rather than separate pages (258 SKUs → ~150 model pages). DEV NOTE: render once in an Elementor Pro Theme Builder single template using dynamic tags, so all product pages share one maintained layout." },
   { n: 6, title: "Applications → industry pages", body: "Chips link to the 6 industry landing pages, strengthening internal linking and helping buyers self-qualify." },
   { n: 7, title: "Social proof", body: "Pull-quote from the 31 existing case studies plus client logo strip. Real proof, no fabricated testimonials." },
-  { n: 8, title: "Related products by taxonomy", body: "Auto-queried from the same series/type — zero manual curation needed when new models are added." },
-  { n: 9, title: "Salesforce-integrated enquiry form", body: "Form posts to CRM and redirects to a /thank-you/ page so ad and analytics conversion tracking keeps working. DEV NOTE: two options — (a) rebuild in Elementor Pro Forms with a webhook action to Salesforce Web-to-Lead (fewer plugins, styled natively in the builder), or (b) keep the existing Ninja Forms + Salesforce addon and restyle it. Prefer (a) unless the Salesforce field mapping proves complex; either way, re-test the /thank-you/ redirect and hidden UTM/GCLID fields after migration." },
-  { n: 10, title: "Sticky mobile quote bar", body: "MOBILE-FIRST: on screens below lg, a bar fixed to the bottom of the viewport keeps 'Request a Quote' + 'Call' one thumb-tap away throughout the long spec page — B2B buyers on site visits often check specs from a phone next to the machine. ≥44px tap targets; hidden on desktop where the right-column conversion stack stays visible. Uses Hitachi Red for the primary action only." },
+  { n: 8, title: "Related products by taxonomy", body: "Auto-queried from the same series/type - zero manual curation needed when new models are added." },
+  { n: 9, title: "Salesforce-integrated enquiry form", body: "Form posts to CRM and redirects to a /thank-you/ page so ad and analytics conversion tracking keeps working. DEV NOTE: two options - (a) rebuild in Elementor Pro Forms with a webhook action to Salesforce Web-to-Lead (fewer plugins, styled natively in the builder), or (b) keep the existing Ninja Forms + Salesforce addon and restyle it. Prefer (a) unless the Salesforce field mapping proves complex; either way, re-test the /thank-you/ redirect and hidden UTM/GCLID fields after migration." },
+  { n: 10, title: "Sticky mobile quote bar", body: "MOBILE-FIRST: on screens below lg, a bar fixed to the bottom of the viewport keeps 'Request a Quote' + 'Call' one thumb-tap away throughout the long spec page - B2B buyers on site visits often check specs from a phone next to the machine. ≥44px tap targets; hidden on desktop where the right-column conversion stack stays visible. Uses Hitachi Red for the primary action only." },
 ];
 
-/* Real values from ProductList-Marketing.xlsx — the three VOC 90 V pressure-variant
+/* Real values from ProductList-Marketing.xlsx - the three VOC 90 V pressure-variant
    SKUs (rows in one table, not separate pages) plus the fixed-speed VOC 90 sibling. */
 const SPECS: Array<[string, string, string, string, string]> = [
   ["Model / variant", "VOC 90 V · 7.5 bar (this page)", "VOC 90 V · 10 bar", "VOC 90 V · 13 bar", "VOC 90 (fixed speed)"],
   ["Part number", "1004-3878", "1004-3888", "1004-3879", "1004-3885 / -3887"],
   ["Motor power (kW / HP)", "90 / 125", "90 / 125", "90 / 125", "90 / 125"],
-  ["Free air delivery (L/s · cfm)", "279 · 591", "239 · 505", "206 · 437", "206–279 · 437–591"],
+  ["Free air delivery (L/s · cfm)", "279 · 591", "239 · 505", "206 · 437", "206-279 · 437-591"],
   ["Max pressure (bar)", "7.5", "10", "13", "7.5 / 10 / 13"],
   ["Capacity control", "VSD", "VSD", "VSD", "Spiral Valve"],
   ["Start type", "VSD", "VSD", "VSD", "Wye-Delta"],
@@ -66,7 +66,7 @@ export default function ProductPage() {
   return (
     <KitShell page="product" notes={NOTES}>
       <SheetTitle
-        code="Template 02 / Single Product — /products/stationary/vocv-45-90/voc-90-v/"
+        code="Template 02 / Single Product - /products/stationary/vocv-45-90/voc-90-v/"
         title="Single Product Page"
         desc="Responsive wireframe using a real model (Champion VOC 90 V, part 1004-3878) from the client's product list. Section tabs scroll to their anchors; on mobile a sticky quote bar keeps the CTA one tap away."
       />
@@ -111,7 +111,7 @@ export default function ProductPage() {
               VOC 90 V Oil Flooded Screw Compressor
             </h2>
             <p className="text-sm text-muted-foreground mt-3 leading-relaxed">
-              Value proposition — variable speed drive matches output to demand,
+              Value proposition - variable speed drive matches output to demand,
               cutting energy costs by up to 35% for variable-load plants.
             </p>
 
@@ -136,7 +136,7 @@ export default function ProductPage() {
                 <ShieldCheck className="w-4 h-4" /> 5-year airend warranty
               </span>
               <span className="flex items-center gap-1.5">
-                <BadgeCheck className="w-4 h-4" /> In stock — AU warehouse
+                <BadgeCheck className="w-4 h-4" /> In stock - AU warehouse
               </span>
             </div>
 
@@ -156,7 +156,7 @@ export default function ProductPage() {
           </div>
         </section>
 
-        {/* Section tabs — scroll to anchors, NOT sticky */}
+        {/* Section tabs - scroll to anchors, NOT sticky */}
         <nav className="relative border-y bg-secondary px-4 lg:px-8">
           <Note n={4} className="!-top-1" />
           <div className="flex gap-0 overflow-x-auto">
@@ -205,7 +205,7 @@ export default function ProductPage() {
         <section id="wf-specs" className="relative border-t px-4 lg:px-8 py-10 bg-secondary/40 scroll-mt-16">
           <Note n={5} />
           <p className="wf-kicker mb-1">Specifications</p>
-          <h3 className="font-bold text-xl mb-5">VOCV 45-90 series — full specification</h3>
+          <h3 className="font-bold text-xl mb-5">VOCV 45-90 series - full specification</h3>
           <div className="overflow-x-auto" data-no-lorem>
             <table className="w-full border bg-card text-[13px]">
               <tbody>
@@ -227,7 +227,7 @@ export default function ProductPage() {
             </table>
           </div>
           <p className="font-mono text-[10px] text-muted-foreground mt-2">
-            Highlighted column = SKU being viewed. All values are real, from ProductList-Marketing.xlsx (JetEngine meta fields); the three pressure-variant SKUs of the VOC 90 V live as columns in one table — not separate pages — with the fixed-speed sibling for comparison.
+            Highlighted column = SKU being viewed. All values are real, from ProductList-Marketing.xlsx (JetEngine meta fields); the three pressure-variant SKUs of the VOC 90 V live as columns in one table - not separate pages - with the fixed-speed sibling for comparison.
           </p>
         </section>
 
@@ -238,7 +238,7 @@ export default function ProductPage() {
           <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
             {[
               "Variable speed drive efficiency",
-              "Direct drive — no belt losses",
+              "Direct drive - no belt losses",
               "IP54 motor · 50°C ambient rated",
               "Colour touchscreen controller",
               "Sullube fluid · air cooled",
@@ -300,12 +300,12 @@ export default function ProductPage() {
             <div className="border-l-4 border-primary pl-5">
               <Quote className="w-5 h-5 text-muted-foreground mb-2" />
               <p className="text-lg font-medium leading-relaxed">
-                Pull-quote from an existing HGAP case study — e.g. the Dulux
+                Pull-quote from an existing HGAP case study - e.g. the Dulux
                 Merrifield preventative maintenance story or ITO EN nitrogen
                 generation install.
               </p>
               <p className="font-mono text-[11px] text-muted-foreground mt-3">
-                — Source: /insights/ case study library (31 available)
+                - Source: /insights/ case study library (31 available)
               </p>
             </div>
             <div className="grid grid-cols-3 gap-2">
@@ -375,7 +375,7 @@ export default function ProductPage() {
 
         <WfFooter />
 
-        {/* Sticky mobile quote bar — wireframe representation (annotation 10).
+        {/* Sticky mobile quote bar - wireframe representation (annotation 10).
             In production: position:fixed bottom bar < lg breakpoint. */}
         <div className="lg:hidden sticky bottom-0 z-30 border-t-2 border-foreground bg-card">
           <Note n={10} className="!-top-2 !left-2" />

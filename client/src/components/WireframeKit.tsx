@@ -60,7 +60,7 @@ export function KitShell({
   return (
     <NotesCtx.Provider value={{ show: showNotes }}>
       <div className="min-h-screen blueprint-bg">
-        {/* Kit toolbar — navigation chrome, kept in English in lorem mode */}
+        {/* Kit toolbar - navigation chrome, kept in English in lorem mode */}
         <div data-no-lorem className="sticky top-0 z-50 bg-[oklch(0.22_0.005_90)] text-[oklch(0.9_0.002_90)]">
           <div className="flex items-center gap-0 h-11 px-4">
             <span className="font-mono text-[11px] font-semibold tracking-[0.14em] uppercase whitespace-nowrap">
@@ -128,7 +128,7 @@ export function KitShell({
           )}
 
           <p className="font-mono text-[10px] uppercase tracking-[0.14em] text-muted-foreground mt-8 text-center">
-            Wireframe — structure &amp; functionality only. Not visual design. ·
+            Wireframe - structure &amp; functionality only. Not visual design. ·
             Hitachi Global Air Power Australia rebuild · Prepared{" "}
             {new Date().toLocaleDateString("en-AU", {
               day: "2-digit",

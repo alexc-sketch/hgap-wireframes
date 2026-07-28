@@ -1,6 +1,6 @@
 /*
  * STYLE: Blueprint Studio wireframe (ideas.md)
- * Quick Quote modal — functional demo of the intended quote flow.
+ * Quick Quote modal - functional demo of the intended quote flow.
  * Step 1: pre-filled product context + short Salesforce-mapped form.
  * Step 2: confirmation ("thank you") state with tracking note.
  * Grayscale, radius 0, amber CTAs only.
@@ -45,7 +45,7 @@ export default function QuickQuoteModal({
         {/* Modal header */}
         <div className="flex items-center justify-between border-b px-5 py-3.5 bg-secondary">
           <p className="font-mono text-[11px] uppercase tracking-wide">
-            {step === 1 ? "Quick Quote — 30 seconds" : "Request received"}
+            {step === 1 ? "Quick Quote - 30 seconds" : "Request received"}
           </p>
           <button onClick={onClose} aria-label="Close">
             <X className="w-4 h-4" />
@@ -70,7 +70,7 @@ export default function QuickQuoteModal({
               </div>
             </div>
             <p className="font-mono text-[10px] text-primary mt-2">
-              ↑ Product auto-attached as a hidden field — the buyer never re-types the model.
+              ↑ Product auto-attached as a hidden field - the buyer never re-types the model.
             </p>
 
             {/* Short form */}
@@ -127,7 +127,7 @@ export default function QuickQuoteModal({
             <span className="inline-flex items-center justify-center w-12 h-12 border-2 border-foreground mb-4">
               <Check className="w-6 h-6" />
             </span>
-            <h3 className="font-bold text-xl">Thanks — request received</h3>
+            <h3 className="font-bold text-xl">Thanks - request received</h3>
             <p className="text-sm text-muted-foreground mt-2 max-w-sm mx-auto">
               Confirmation state: "A compressed air specialist from your
               nearest branch will contact you within one business day about

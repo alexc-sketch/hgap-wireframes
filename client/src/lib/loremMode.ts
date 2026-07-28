@@ -88,6 +88,18 @@ export function loremize(text: string): string {
 
 const PROCESSED = new WeakSet<Text>();
 
+/** Routes that show REAL English copy even when lorem mode is on
+ *  (client request: product list + product page review with real data/copy). */
+const REAL_COPY_ROUTES = ["/product-list", "/product-page"];
+
+function isRealCopyRoute(): boolean {
+  // support both hash routing (GitHub Pages) and path routing (dev preview)
+  const hash = window.location.hash.replace(/^#/, "").split("?")[0];
+  if (hash && hash !== "/") return REAL_COPY_ROUTES.includes(hash);
+  const path = window.location.pathname.replace(/\/$/, "") || "/";
+  return REAL_COPY_ROUTES.some((r) => path.endsWith(r));
+}
+
 /** True when a node sits inside an element marked data-no-lorem
  *  (navigation chrome such as the kit toolbar, site header nav, utility
  *  bar and footer stay in English so reviewers can orient themselves). */
@@ -98,6 +110,7 @@ function isExcluded(node: Node): boolean {
 }
 
 function walk(root: Node) {
+  if (isRealCopyRoute()) return;
   if (isExcluded(root)) return;
   const walker = document.createTreeWalker(root, NodeFilter.SHOW_TEXT, {
     acceptNode(node) {
@@ -150,6 +163,7 @@ export function initLoremMode() {
   requestAnimationFrame(apply);
   // observe subsequent renders (route changes, filter interactions, modals)
   const mo = new MutationObserver((muts) => {
+    if (isRealCopyRoute()) return;
     for (const m of muts) {
       if (m.type === "childList") {
         m.addedNodes.forEach((node) => walk(node));
@@ -168,8 +182,14 @@ export function initLoremMode() {
     subtree: true,
     characterData: true,
   });
-  // badge so viewers know copy is placeholder
+  // badge so viewers know copy is placeholder (hidden on real-copy routes)
   const badge = document.createElement("div");
+  badge.setAttribute("data-no-lorem", "");
+  const setBadge = () => {
+    badge.style.display = isRealCopyRoute() ? "none" : "block";
+  };
+  window.addEventListener("hashchange", setBadge);
+  requestAnimationFrame(setBadge);
   badge.textContent = "LOREM IPSUM COPY / placeholder text variant";
   badge.setAttribute(
     "style",

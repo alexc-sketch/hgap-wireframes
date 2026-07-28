@@ -1,6 +1,6 @@
 /*
  * STYLE: Blueprint Studio wireframe (ideas.md)
- * 01 — Product List template. Grayscale blocks, radius 0, amber CTAs only.
+ * 01 - Product List template. Grayscale blocks, radius 0, amber CTAs only.
  * Interactive: filter checkboxes update result count, compare tray demo.
  * Section nav (quicklink) is NOT sticky per client rule.
  */
@@ -30,7 +30,7 @@ import {
 } from "lucide-react";
 
 /* All 150 real models from the client's ProductList-Marketing.xlsx (258 SKUs / 44 series)
-   are imported from lib/productData.ts — generated straight from the spreadsheet. */
+   are imported from lib/productData.ts - generated straight from the spreadsheet. */
 const PRODUCTS = PRODUCT_MODELS;
 
 function cardName(p: ProductModel): string {
@@ -45,32 +45,32 @@ function cardName(p: ProductModel): string {
 
 /* Facet counts = real MODEL counts (258 SKUs aggregated to 150 models) from ProductList-Marketing.xlsx */
 const FACETS: Array<[string, string[]]> = [
-  ["Category", ["Stationary (109)", "Portable (33)", "OEM Airends (8)", "Accessories — data TBC"]],
+  ["Category", ["Stationary (109)", "Portable (33)", "OEM Airends (8)", "Accessories - data TBC"]],
   ["Air Type", ["Oil Flooded (84)", "Oil Free (58)"]],
   ["Brand", ["Sullair (74)", "Champion (36)", "Hitachi (36)", "Bebicon (3)", "Air-One (1)"]],
   ["Drive", ["Fixed Speed (86)", "Variable Speed VSD (31)", "Diesel engine (33)"]],
-  ["Max Pressure", ["7–8 bar (17)", "8.5–10 bar (69)", "10.5–15 bar (45)", "Over 15 bar (19)"]],
-  ["Motor Power", ["Up to 15 kW (34)", "16–75 kW (62)", "76–160 kW (24)", "Over 160 kW (30)"]],
+  ["Max Pressure", ["7-8 bar (17)", "8.5-10 bar (69)", "10.5-15 bar (45)", "Over 15 bar (19)"]],
+  ["Motor Power", ["Up to 15 kW (34)", "16-75 kW (62)", "76-160 kW (24)", "Over 160 kW (30)"]],
   ["Connectivity", ["AirLinx remote monitoring (112 SKUs)"]],
 ];
 
-/* Guided finder dropdown definitions — each option maps to a filter rule */
+/* Guided finder dropdown definitions - each option maps to a filter rule */
 const FINDER: Array<{ label: string; options: string[] }> = [
   { label: "1 · Application", options: ["Workshop / trades", "Continuous industrial", "Portable / site work", "Clean air (food, pharma)"] },
-  { label: "2 · Air demand (cfm)", options: ["Up to 100 cfm", "100–500 cfm", "500–1,000 cfm", "1,000+ cfm"] },
+  { label: "2 · Air demand (cfm)", options: ["Up to 100 cfm", "100-500 cfm", "500-1,000 cfm", "1,000+ cfm"] },
   { label: "3 · Power supply", options: ["Single phase", "Three phase", "Diesel (no mains power)"] },
 ];
 
-const SORTS = ["Relevance", "Power: low → high", "Power: high → low", "Flow: high → low", "Name A–Z"];
+const SORTS = ["Relevance", "Power: low → high", "Power: high → low", "Flow: high → low", "Name A-Z"];
 
 const NOTES: NoteDef[] = [
   { n: 1, title: "Global header + primary CTA", body: "Persistent 'CONTACT US' (live-site CTA label, Hitachi Red) is the #1 conversion action. Mega-menu routes by product type and industry (competitor pattern: Atlas Copco intent-based navigation). Header lockup follows Hitachi brand rules: HITACHI mark leads, 'Global Air Power' wordmark subordinate and never red." },
-  { n: 2, title: "Archive hero with live count", body: "H1 targets the head keyword ('Air Compressors Australia'). Counts now reflect the client's real catalogue: 258 SKUs across 150 models in 44 series (ProductList-Marketing.xlsx). Recommend product pages at MODEL level (~150 pages) with pressure-variant SKUs shown as rows in the spec table — not separate pages. Category sub-nav mirrors the agreed Products menu: All / Stationary / Portable / Oil Flooded / Oil Free / Accessories." },
-  { n: 3, title: "Guided product finder", body: "3-step selector (application → air demand → power) for non-technical buyers, modelled on Sullair America's interactive guide. Functional in this prototype — pick options and 'Show matches' narrows the grid. In production each combination maps to a pre-filtered archive URL so results are shareable and indexable." },
-  { n: 4, title: "Faceted filter sidebar — real spec-sheet facets", body: "MOBILE-FIRST: below the lg breakpoint the sidebar collapses into a full-width drawer behind a 44px 'Filters' button showing the active-filter count — tap it in this prototype to see the drawer. EVERY FACET IS NOW DRIVEN BY THE CLIENT'S ProductList-Marketing.xlsx: all 150 models are loaded and every checkbox filters the live grid. TAXONOMY: products map on TWO AXES — Category (Stationary 109 / Portable 33 / OEM 8 models) and Air Type (Oil Flooded 84 / Oil Free 58). A VOC 90 is BOTH Stationary AND Oil Flooded, so these are two separate taxonomies, not one flat tree: the nav categories become landing pages while products cross-list without duplication. FACET SOURCES: Brand = BRANDING column (Sullair 74 / Champion 36 / Hitachi 36 / Bebicon 3 / Air-One 1 models); Drive = derived from CAPACITY CONTROLS + START TYPE (Fixed 86 / VSD 31) and engine-driven portables (33); Pressure and Power buckets from MAX PRESSURE (BAR) and MOTOR RATING (kW); Connectivity = the 112 AirLinx-equipped SKUs. ACCESSORIES: the Excel contains no accessories rows — the facet is shown greyed as 'data TBC' until the client supplies that list. OEM: the 8 bare-airend models are included under 'OEM Airends' pending a decision (include, separate, or exclude?). An INDUSTRY facet is recommended but requires tagging — the spreadsheet has no industry column, so each model needs industry terms assigned during content entry (one-off, then reused by homepage tiles and industry pages). DEV NOTE: build with JetSmartFilters paired with a JetEngine Listing Grid (Crocoblock's recommended provider for full AJAX). Avoid pairing JSF with Elementor Pro's Loop Grid — its AJAX mode drops URL params and breaks search/sorting filters (page-reload only). Enable the JSF Indexer for live per-facet counts and URL aliases for clean, indexable filter URLs (e.g. /products/?brand=sullair)." },
-  { n: 5, title: "Product cards — all 150 real models", body: "Every card is a real model from the spec sheet, showing kW / cfm / bar (top of range) plus its series and how many pressure-variant SKUs roll up into the one page. Models load 24 at a time ('Load more') — in production this is AJAX pagination. Two actions: View Product (research) and Quick Quote (conversion). Quick Quote is functional in this prototype — click it to walk the full flow: pre-filled product context, a 5-field form (product, page URL, UTM and GCLID travel as hidden fields), AJAX submit via Elementor Pro Forms (webhook action) → Salesforce Web-to-Lead, postcode-based branch routing, then a confirmation state that fires the GA4/Ads conversion event. No page reload, no re-typing the model name." },
+  { n: 2, title: "Archive hero with live count", body: "H1 targets the head keyword ('Air Compressors Australia'). Counts now reflect the client's real catalogue: 258 SKUs across 150 models in 44 series (ProductList-Marketing.xlsx). Recommend product pages at MODEL level (~150 pages) with pressure-variant SKUs shown as rows in the spec table - not separate pages. Category sub-nav mirrors the agreed Products menu: All / Stationary / Portable / Oil Flooded / Oil Free / Accessories." },
+  { n: 3, title: "Guided product finder", body: "3-step selector (application → air demand → power) for non-technical buyers, modelled on Sullair America's interactive guide. Functional in this prototype - pick options and 'Show matches' narrows the grid. In production each combination maps to a pre-filtered archive URL so results are shareable and indexable." },
+  { n: 4, title: "Faceted filter sidebar - real spec-sheet facets", body: "MOBILE-FIRST: below the lg breakpoint the sidebar collapses into a full-width drawer behind a 44px 'Filters' button showing the active-filter count - tap it in this prototype to see the drawer. EVERY FACET IS NOW DRIVEN BY THE CLIENT'S ProductList-Marketing.xlsx: all 150 models are loaded and every checkbox filters the live grid. TAXONOMY: products map on TWO AXES - Category (Stationary 109 / Portable 33 / OEM 8 models) and Air Type (Oil Flooded 84 / Oil Free 58). A VOC 90 is BOTH Stationary AND Oil Flooded, so these are two separate taxonomies, not one flat tree: the nav categories become landing pages while products cross-list without duplication. FACET SOURCES: Brand = BRANDING column (Sullair 74 / Champion 36 / Hitachi 36 / Bebicon 3 / Air-One 1 models); Drive = derived from CAPACITY CONTROLS + START TYPE (Fixed 86 / VSD 31) and engine-driven portables (33); Pressure and Power buckets from MAX PRESSURE (BAR) and MOTOR RATING (kW); Connectivity = the 112 AirLinx-equipped SKUs. ACCESSORIES: the Excel contains no accessories rows - the facet is shown greyed as 'data TBC' until the client supplies that list. OEM: the 8 bare-airend models are included under 'OEM Airends' pending a decision (include, separate, or exclude?). An INDUSTRY facet is recommended but requires tagging - the spreadsheet has no industry column, so each model needs industry terms assigned during content entry (one-off, then reused by homepage tiles and industry pages). DEV NOTE: build with JetSmartFilters paired with a JetEngine Listing Grid (Crocoblock's recommended provider for full AJAX). Avoid pairing JSF with Elementor Pro's Loop Grid - its AJAX mode drops URL params and breaks search/sorting filters (page-reload only). Enable the JSF Indexer for live per-facet counts and URL aliases for clean, indexable filter URLs (e.g. /products/?brand=sullair)." },
+  { n: 5, title: "Product cards - all 150 real models", body: "Every card is a real model from the spec sheet, showing kW / cfm / bar (top of range) plus its series and how many pressure-variant SKUs roll up into the one page. Models load 24 at a time ('Load more') - in production this is AJAX pagination. Two actions: View Product (research) and Quick Quote (conversion). Quick Quote is functional in this prototype - click it to walk the full flow: pre-filled product context, a 5-field form (product, page URL, UTM and GCLID travel as hidden fields), AJAX submit via Elementor Pro Forms (webhook action) → Salesforce Web-to-Lead, postcode-based branch routing, then a confirmation state that fires the GA4/Ads conversion event. No page reload, no re-typing the model name." },
   { n: 6, title: "Compare tray", body: "Optional enhancement: select up to 3 models for a side-by-side spec table. Appears only when items are selected." },
-  { n: 7, title: "Trust band (social proof)", body: "24/7 service, genuine OEM parts, 6 Australian branches — differentiators vs importers, per competitor gap analysis (CAPS / Pilot Air)." },
+  { n: 7, title: "Trust band (social proof)", body: "24/7 service, genuine OEM parts, 6 Australian branches - differentiators vs importers, per competitor gap analysis (CAPS / Pilot Air)." },
   { n: 8, title: "Related insights", body: "Feeds the 105-article Insights library into the buying journey for SEO internal linking." },
   { n: 9, title: "Final CTA (centred)", body: "Every template ends with one centrally-aligned conversion moment: phone + quote form. No dead ends." },
 ];
@@ -101,8 +101,8 @@ export default function ProductList() {
     if (app === "Clean air (food, pharma)") list = list.filter((p) => p.type === "Oil Free");
     const dem = finderApplied["2 · Air demand (cfm)"];
     if (dem === "Up to 100 cfm") list = list.filter((p) => p.cfm <= 100);
-    if (dem === "100–500 cfm") list = list.filter((p) => p.cfm > 100 && p.cfm <= 500);
-    if (dem === "500–1,000 cfm") list = list.filter((p) => p.cfm > 500 && p.cfm <= 1000);
+    if (dem === "100-500 cfm") list = list.filter((p) => p.cfm > 100 && p.cfm <= 500);
+    if (dem === "500-1,000 cfm") list = list.filter((p) => p.cfm > 500 && p.cfm <= 1000);
     if (dem === "1,000+ cfm") list = list.filter((p) => p.cfm > 1000);
     const pow = finderApplied["3 · Power supply"];
     if (pow === "Single phase") list = list.filter((p) => p.kw <= 15 && p.driveClass !== "Diesel");
@@ -112,7 +112,7 @@ export default function ProductList() {
     if (activeFilters.length === 0) return list;
     return list.filter((p) =>
       activeFilters.every((f) => {
-        const label = f.replace(/\s\([^)]*\)$/, "").replace(" — data TBC", "");
+        const label = f.replace(/\s\([^)]*\)$/, "").replace(" - data TBC", "");
         if (["Sullair", "Champion", "Hitachi", "Bebicon", "Air-One"].includes(label.split(" ")[0]))
           return p.brand === label.split(" ")[0];
         if (label === "Stationary" || label === "Portable") return p.category === label;
@@ -124,7 +124,7 @@ export default function ProductList() {
         if (label.startsWith("Diesel")) return p.driveClass === "Diesel";
         if (label.startsWith("AirLinx")) return p.connectivity === "Airlinx";
         if (label.includes("bar")) {
-          if (label.startsWith("7–8")) return p.bar <= 8;
+          if (label.startsWith("7-8")) return p.bar <= 8;
           if (label.startsWith("8.5")) return p.bar > 8 && p.bar <= 10;
           if (label.startsWith("10.5")) return p.bar > 10 && p.bar <= 15;
           return p.bar > 15;
@@ -145,7 +145,7 @@ export default function ProductList() {
     if (sort === "Power: low → high") list.sort((a, b) => a.kw - b.kw);
     if (sort === "Power: high → low") list.sort((a, b) => b.kw - a.kw);
     if (sort === "Flow: high → low") list.sort((a, b) => b.cfm - a.cfm);
-    if (sort === "Name A–Z") list.sort((a, b) => a.model.localeCompare(b.model));
+    if (sort === "Name A-Z") list.sort((a, b) => a.model.localeCompare(b.model));
     return list;
   }, [visible, sort]);
 
@@ -164,9 +164,9 @@ export default function ProductList() {
   return (
     <KitShell page="list" notes={NOTES}>
       <SheetTitle
-        code="Template 01 / Product Archive — /products/"
+        code="Template 01 / Product Archive - /products/"
         title="Product List Page with Faceted Filters"
-        desc="Responsive wireframe (resize to preview mobile). Filters are live in this prototype — tick a facet to see the result grid respond; on mobile they collapse behind a Filters button."
+        desc="Responsive wireframe (resize to preview mobile). Filters are live in this prototype - tick a facet to see the result grid respond; on mobile they collapse behind a Filters button."
       />
 
       <div className="wf-sheet overflow-hidden">
@@ -182,7 +182,7 @@ export default function ProductList() {
           <p className="font-mono text-[11px] text-muted-foreground mb-2">
             Home <ChevronRight className="inline w-3 h-3" /> Products
           </p>
-          {/* Category sub-nav — the six agreed categories under Products */}
+          {/* Category sub-nav - the six agreed categories under Products */}
           <div className="flex flex-wrap gap-1.5 mb-4">
             {["All Products", "Stationary Air Compressors", "Portable Air Compressors", "Oil Flooded", "Oil Free Air Compressors", "Air Compressor Accessories"].map((c, i) => (
               <span key={c} className={`border px-3 py-1.5 text-[12px] font-medium ${i === 0 ? "bg-foreground text-background" : "bg-card"}`}>
@@ -196,7 +196,7 @@ export default function ProductList() {
                 Air Compressors &amp; Compressed Air Equipment
               </h2>
               <p className="text-sm text-muted-foreground mt-2 max-w-xl">
-                Value proposition line — Champion, Sullair &amp; Hitachi ranges, sold and serviced from 6 Australian branches.
+                Value proposition line - Champion, Sullair &amp; Hitachi ranges, sold and serviced from 6 Australian branches.
               </p>
             </div>
             <span className="font-mono text-[11px] uppercase tracking-wide bg-foreground text-background px-3 py-1.5" data-no-lorem>
@@ -285,7 +285,7 @@ export default function ProductList() {
 
         {/* Main 2-col (stacks on mobile) */}
         <div className="grid lg:grid-cols-[280px_1fr]">
-          {/* Sidebar — drawer on mobile, persistent ≥lg */}
+          {/* Sidebar - drawer on mobile, persistent ≥lg */}
           <aside
             data-no-lorem
             className={`relative border-r px-5 py-6 bg-card ${
@@ -343,7 +343,7 @@ export default function ProductList() {
               </div>
             ))}
 
-            {/* Range sliders — real catalogue extents from the spec sheet */}
+            {/* Range sliders - real catalogue extents from the spec sheet */}
             {["Power (kW): 1.5 to 522", "Flow (cfm): 6 to 2,700", "Pressure (bar): 7 to 34.5"].map((s) => (
               <div key={s} className="border-t py-4">
                 <p className="wf-kicker mb-3 !text-foreground/70">{s}</p>
@@ -430,9 +430,9 @@ export default function ProductList() {
                     </h3>
                     <div className="grid grid-cols-3 border divide-x text-center mt-1">
                       {[
-                        [p.kwRange || "—", "kW"],
-                        [p.cfm ? p.cfm.toLocaleString() : "—", "cfm"],
-                        [p.barRange || "—", "bar"],
+                        [p.kwRange || "-", "kW"],
+                        [p.cfm ? p.cfm.toLocaleString() : "-", "cfm"],
+                        [p.barRange || "-", "bar"],
                       ].map(([v, u]) => (
                         <div key={u as string} className="py-1.5">
                           <p className="font-semibold text-[13px]">{v}</p>
@@ -472,7 +472,7 @@ export default function ProductList() {
               ))}
             </div>
 
-            {/* Load more — real count driven */}
+            {/* Load more - real count driven */}
             <div className="flex flex-col items-center gap-2 mt-6">
               <p className="font-mono text-[11px] text-muted-foreground">
                 {Math.min(visibleCount, sorted.length)} of {sorted.length} shown
@@ -546,7 +546,7 @@ export default function ProductList() {
           <div className="grid sm:grid-cols-3 gap-4">
             {[
               "How does an air compressor work?",
-              "Fixed speed vs VSD — which is right for you?",
+              "Fixed speed vs VSD - which is right for you?",
               "The classification of oil free air grades",
             ].map((t) => (
               <div key={t} className="bg-card border">
@@ -562,14 +562,14 @@ export default function ProductList() {
           </div>
         </section>
 
-        {/* Final CTA — centred per client rule */}
+        {/* Final CTA - centred per client rule */}
         <section className="relative border-t bg-foreground text-background px-4 py-12 text-center">
           <Note n={9} />
           <h3 className="font-bold text-2xl">
             Speak to a compressed air specialist
           </h3>
           <p className="text-sm text-background/70 mt-2 max-w-md mx-auto">
-            Sizing, servicing or replacing — our engineers respond within one
+            Sizing, servicing or replacing - our engineers respond within one
             business day.
           </p>
           <div className="flex justify-center gap-3 mt-6">
