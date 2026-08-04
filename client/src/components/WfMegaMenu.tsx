@@ -1,8 +1,12 @@
 /*
  * STYLE: Blueprint Studio wireframe kit, Hitachi-branded (ideas.md)
- * Functioning mega menu modelled on The Plus Addons for Elementor mega menu:
- * full-width panel under the header, multi-column link lists, a featured
- * promo card, hover + click + keyboard open, mobile accordion fallback.
+ * Functioning mega menu, sitemap-driven. Pattern: full-width panel under the
+ * header, multi-column link lists, a featured promo card, hover + click +
+ * keyboard open, mobile accordion fallback.
+ * GUTENBERG BUILD: see Homepage annotation 1. Either a custom Mega Menu block
+ * inside the core Navigation block with each panel as a Menu template part
+ * (WP 6.5+ Interactivity API pattern), or a custom ACF Block header rendered in
+ * the header template part. The core Navigation block alone cannot do this.
  * Structure driven by the client's WIP sitemap (pasted_content_3.txt):
  *   All Products / Solutions / Services & Parts / Industries / About Us / Careers
  * Sharp geometry (radius 0), Hitachi Red active states only, no gradients.
@@ -202,7 +206,7 @@ function MegaPanel({ entry, onClose }: { entry: NavEntry; onClose: () => void })
   );
 }
 
-/** Header with a functioning Plus Addons style mega menu (desktop) and
+/** Header with a functioning mega menu (desktop) and
  *  accordion drawer (mobile). Drop-in replacement for WfHeader on pages
  *  that demo the final navigation. */
 export function WfMegaHeader({ active }: { active?: string }) {

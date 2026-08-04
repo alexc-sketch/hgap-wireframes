@@ -219,8 +219,9 @@ export function WfHeader({ active }: { active?: "products" | "industries" }) {
 }
 
 /* Minimal global newsletter strip: rendered above the footer on every template.
-   One row: label + email field + SUBSCRIBE. DEV NOTE: single global instance
-   (theme part), wired to the email platform with double opt-in. */
+   One row: label + email field + SUBSCRIBE. GUTENBERG: build once inside the
+   footer template part (or as a synced pattern) so it is global with no plugin,
+   wired to the email platform with double opt-in. */
 export function WfNewsletter() {
   return (
     <section className="border-t bg-secondary/60 px-4 lg:px-8 py-6">

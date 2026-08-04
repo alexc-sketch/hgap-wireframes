@@ -116,7 +116,7 @@ export default function QuickQuoteModal({
                 Send quote request
               </button>
               <p className="font-mono text-[9px] text-muted-foreground leading-relaxed">
-                DEV NOTE: submits via AJAX to the forms plugin → Salesforce
+                GUTENBERG: block-native forms plugin (Gravity, WS Form or Fluent Forms) → Salesforce
                 Web-to-Lead. Hidden fields: product name, SKU, page URL, UTM
                 params, GCLID. No page reload.
               </p>
