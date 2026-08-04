@@ -1,6 +1,7 @@
 /*
  * STYLE: Blueprint Studio wireframe kit (ideas.md)
- * 00 — Cover page: what this kit contains, context, how to present it.
+ * 00 / Cover page: what this kit contains, context, how to present it.
+ * COPY: real English, no em dashes. Build stack is Gutenberg block theme plus ACF Pro.
  */
 import { Link } from "wouter";
 import { KitShell } from "@/components/WireframeKit";
@@ -29,12 +30,19 @@ export default function Home() {
         <p className="text-muted-foreground mt-4 max-w-2xl leading-relaxed">
           Seven structural templates for the rebuilt site: homepage, brand
           page, product category page, filterable product archive, single
-          product detail page, industry archive and industry page — together
-          covering the journey from landing to enquiry for all{" "}
-          <strong>258 SKUs · 150 models</strong> across <strong>6 industries</strong>.
-          Now dressed in the Hitachi brand system — Hitachi Red, corporate type and the correct
-            HITACHI + Global Air Power lockup — while imagery stays as placeholders. Mobile-first:
-            resize the window to preview drawer filters and the sticky quote bar.
+          product detail page, industry archive and industry page. Together they
+          cover the journey from landing to enquiry for all{" "}
+          <strong>258 SKUs across 150 models</strong> and{" "}
+          <strong>6 industries</strong>. Product data is real, taken from the
+          client product list. Imagery stays as placeholders. The kit is built
+          mobile first, so resize the window to preview the drawer filters and
+          the sticky quote bar.
+        </p>
+        <p className="text-muted-foreground mt-3 max-w-2xl leading-relaxed">
+          Build stack for the rebuild is a WordPress Gutenberg block theme with
+          ACF Pro for the product data, so each annotation names the blocks,
+          fields and patterns the developer needs rather than describing a
+          visual layout alone.
         </p>
 
         <div className="grid md:grid-cols-2 gap-5 mt-10">
@@ -58,8 +66,8 @@ export default function Home() {
             <h2 className="font-bold text-xl">Single Product Page</h2>
             <p className="text-sm text-muted-foreground mt-2">
               Gallery, spec snapshot, quote CTA stack, anchored section tabs,
-              series spec table, downloads, case-study proof and
-              Salesforce-integrated enquiry form.
+              grouped ACF specifications, a variant comparison table,
+              downloads, the Request a Quote form and related products.
             </p>
             <span className="inline-flex items-center gap-2 font-mono text-[11px] uppercase tracking-wide mt-4 text-primary">
               Open wireframe <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform duration-150" />
@@ -73,9 +81,9 @@ export default function Home() {
             <p className="wf-kicker mb-1">Template 03</p>
             <h2 className="font-bold text-xl">Homepage</h2>
             <p className="text-sm text-muted-foreground mt-2">
-              Structured hero with dual CTA, intent router, brand strip,
-              categories, industries, service &amp; AirLinx band, social proof
-              and centred final CTA.
+              Working mega menu, hero carousel, product range, five brand
+              tiles, a dedicated AirLinx section, industries, Insights and a
+              centred final CTA.
             </p>
             <span className="inline-flex items-center gap-2 font-mono text-[11px] uppercase tracking-wide mt-4 text-primary">
               Open wireframe <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform duration-150" />
@@ -87,9 +95,9 @@ export default function Home() {
             <p className="wf-kicker mb-1">Template 04</p>
             <h2 className="font-bold text-xl">Brand Page</h2>
             <p className="text-sm text-muted-foreground mt-2">
-              Sullair example — brand hero with proof chips, heritage block,
-              ranges by series, signature technology, brand case study and
-              cross-brand explore strip.
+              Sullair worked example using real catalogue data. Brand hero,
+              live model counts, ranges by series, signature technology,
+              service and parts proof, and a cross brand explore strip.
             </p>
             <span className="inline-flex items-center gap-2 font-mono text-[11px] uppercase tracking-wide mt-4 text-primary">
               Open wireframe <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform duration-150" />
@@ -101,9 +109,9 @@ export default function Home() {
             <p className="wf-kicker mb-1">Template 05</p>
             <h2 className="font-bold text-xl">Category Page</h2>
             <p className="text-sm text-muted-foreground mt-2">
-              Oil Flooded Screw example — SEO landing hero, sub-category
-              tiles, series comparison rows, selection guide, FAQs with schema
-              and newsletter capture.
+              Oil Free worked example using real catalogue data. SEO landing
+              hero, benefit tiles, technology tiles, series comparison rows,
+              selection guide, industries and FAQs with schema.
             </p>
             <span className="inline-flex items-center gap-2 font-mono text-[11px] uppercase tracking-wide mt-4 text-primary">
               Open wireframe <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform duration-150" />
@@ -117,9 +125,9 @@ export default function Home() {
             <p className="wf-kicker mb-1">Template 06</p>
             <h2 className="font-bold text-xl">Industry Archive</h2>
             <p className="text-sm text-muted-foreground mt-2">
-              /industries/ hub — application-led hero, six industry tiles with
-              live product counts, how-we-work band, featured case study and
-              centred final CTA.
+              The /industries/ hub. Application led hero, six industry tiles
+              with live product counts, a how we work band and a centred final
+              CTA. Placeholder copy on this template.
             </p>
             <span className="inline-flex items-center gap-2 font-mono text-[11px] uppercase tracking-wide mt-4 text-primary">
               Open wireframe <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform duration-150" />
@@ -131,9 +139,9 @@ export default function Home() {
             <p className="wf-kicker mb-1">Template 07</p>
             <h2 className="font-bold text-xl">Industry Page</h2>
             <p className="text-sm text-muted-foreground mt-2">
-              Mining example — challenges-to-solutions grid, recommended
-              ranges, pre-filtered product link (/products/?industry=mining),
-              industry case study and sibling-industry explore strip.
+              Mining worked example. Challenges to solutions grid, recommended
+              ranges, a pre filtered product link and a sibling industry
+              explore strip. Placeholder copy on this template.
             </p>
             <span className="inline-flex items-center gap-2 font-mono text-[11px] uppercase tracking-wide mt-4 text-primary">
               Open wireframe <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform duration-150" />
@@ -147,14 +155,21 @@ export default function Home() {
             <div>
               <h3 className="font-semibold">How to read these wireframes</h3>
               <p className="text-sm text-muted-foreground mt-1 leading-relaxed max-w-2xl">
-                Amber numbered badges mark annotated sections — each page ends
-                with an annotation index explaining the rationale (toggle them
-                off with the button in the top bar for a clean client view).
-                Crossed boxes are image placeholders. The filter sidebar,
-                compare tray and section tabs are lightly interactive so the
-                client can feel the intended behaviour. Content shown (models,
-                series, branches, case studies) is real data from the site
-                audit — not lorem ipsum.
+                Amber numbered badges mark annotated sections, and each page
+                ends with an annotation index explaining the rationale and the
+                Gutenberg or ACF build approach. Toggle the badges off with the
+                button in the top bar for a clean client view. Crossed boxes are
+                image placeholders. The mega menu, filter sidebar, compare tray
+                and section tabs are lightly interactive so the client can feel
+                the intended behaviour.
+              </p>
+              <p className="text-sm text-muted-foreground mt-3 leading-relaxed max-w-2xl">
+                Copy status varies by template on purpose. The cover, homepage,
+                brand, category, product list and product page templates carry
+                real English content, with product figures taken from the client
+                product list and tone influenced by the current live site. The
+                industry archive and industry page still carry placeholder copy
+                pending content direction.
               </p>
             </div>
           </div>

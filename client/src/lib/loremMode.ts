@@ -88,15 +88,26 @@ export function loremize(text: string): string {
 
 const PROCESSED = new WeakSet<Text>();
 
-/** Routes that show REAL English copy even when lorem mode is on
- *  (client request: product list + product page review with real data/copy). */
-const REAL_COPY_ROUTES = ["/product-list", "/product-page", "/homepage"];
+/** Routes that show REAL English copy even when lorem mode is on.
+ *  Client direction: cover, homepage, product list, product page, brand page
+ *  (Sullair example) and category page (Oil Free example) all read as real
+ *  content influenced by hitachiglobalairpower.au. The industry archive and
+ *  industry page stay in lorem for now. */
+const REAL_COPY_ROUTES = [
+  "/product-list",
+  "/product-page",
+  "/homepage",
+  "/brand-page",
+  "/category-page",
+];
 
 function isRealCopyRoute(): boolean {
   // support both hash routing (GitHub Pages) and path routing (dev preview)
   const hash = window.location.hash.replace(/^#/, "").split("?")[0];
   if (hash && hash !== "/") return REAL_COPY_ROUTES.includes(hash);
   const path = window.location.pathname.replace(/\/$/, "") || "/";
+  // the cover page is the kit root on both routing modes
+  if (path === "/" || path === "") return true;
   return REAL_COPY_ROUTES.some((r) => path.endsWith(r));
 }
 
