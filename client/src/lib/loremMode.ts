@@ -105,9 +105,23 @@ function isRealCopyRoute(): boolean {
   // support both hash routing (GitHub Pages) and path routing (dev preview)
   const hash = window.location.hash.replace(/^#/, "").split("?")[0];
   if (hash && hash !== "/") return REAL_COPY_ROUTES.includes(hash);
+
+  // No meaningful hash: this is the kit cover page. On GitHub Pages the URL is
+  // /hgap-wireframes/#/ so pathname is the repo base, never "/", which is why a
+  // strict root test failed here. An empty or "/" hash always means the cover.
+  if (hash === "/") return true;
+
   const path = window.location.pathname.replace(/\/$/, "") || "/";
   // the cover page is the kit root on both routing modes
   if (path === "/" || path === "") return true;
+  // repo-scoped base path (GitHub Pages) with no hash is also the cover
+  if (!hash && !REAL_COPY_ROUTES.some((r) => path.endsWith(r))) {
+    const isKnownWireframeRoute = [
+      "/industry-archive",
+      "/industry-page",
+    ].some((r) => path.endsWith(r));
+    if (!isKnownWireframeRoute) return true;
+  }
   return REAL_COPY_ROUTES.some((r) => path.endsWith(r));
 }
 
