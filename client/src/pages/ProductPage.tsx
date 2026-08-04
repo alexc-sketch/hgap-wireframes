@@ -30,30 +30,75 @@ const NOTES: NoteDef[] = [
   { n: 2, title: "Gallery from media library", body: "Main image + thumbnails drawn from the 1,395-attachment media library. Alt text migrated for SEO." },
   { n: 3, title: "Spec snapshot + conversion stack", body: "The four numbers a buyer checks first (power, flow, pressure, noise), then a clear action hierarchy: Request a Quote (primary, scrolls to the quote form) → Download Brochure (lead magnet) → Find a Branch (offline path). Request a Quote is the CTA on every template." },
   { n: 4, title: "Anchored section tabs", body: "Tab bar scrolls the page to each section (scroll effect). Not sticky - keeps the header area calm and predictable." },
-  { n: 5, title: "Full specification table", body: "Powered by structured custom fields populated directly from the client's spec sheet - every column here is a real field in ProductList-Marketing.xlsx (30 spec columns per SKU). The table shows the model plus its series siblings and the fixed-speed vs VSD variants, so pressure-variant SKUs live as table rows rather than separate pages (258 SKUs → ~150 model pages). DEV NOTE: model as ACF field groups on a product post type, or WooCommerce products with ACF-extended attributes (catalogue mode, no cart); render once in a single-product template with dynamic tags so all product pages share one maintained layout." },
+  { n: 5, title: "Specifications as ACF Groups, not a matrix", body: "ACF PRO BUILD SPEC. The old layout put each variant in a COLUMN, which is awkward in ACF because the template has to transpose rows of labels against a variable number of columns. This version uses four ACF Group fields (spec_performance, spec_drive, spec_physical, spec_controls), each holding plain named sub fields (number or text or select). The editor sees an ordinary tabbed form; the template renders each group as a two column label and value list, which is a flat get_field loop with no transposition. Values map 1:1 to the columns in ProductList-Marketing.xlsx. Add an optional repeater additional_specs (label, value) for attributes only some models carry. Use an ACF Clone field so the same spec block is reused across every product post type without redefining fields. Works identically whether the product is a custom post type with ACF or a WooCommerce product in catalogue mode." },
+  { n: 11, title: "Variant repeater: one row per SKU", body: "ACF PRO BUILD SPEC. Repeater field variants with sub fields variant_label, part_number, max_pressure_bar, fad_ls, fad_cfm, capacity_control. Each row is one SKU, so the template is a single while (have_rows('variants')) loop writing a table row: the natural direction of an ACF loop. Because variants are rows, a model with two variants and a model with six use the same template with no conditional column logic. Enable the ACF 6.0 repeater Pagination setting if any series grows long, and do not nest repeaters (pagination is unsupported inside nested repeaters and admin load slows noticeably). Selecting a row passes its part_number into the Request a Quote form. This keeps 258 SKUs inside roughly 150 model pages instead of 258 thin pages." },
   { n: 6, title: "Applications → industry pages", body: "Chips link to the 6 industry landing pages, strengthening internal linking and helping buyers self-qualify." },
   { n: 8, title: "Related products by taxonomy", body: "Positioned below the quote form per client direction: the page drives to the quote request first, then offers sideways moves within the same series/type. Auto-queried by taxonomy (native WooCommerce related products or an ACF taxonomy query) - zero manual curation needed when new models are added." },
   { n: 9, title: "Salesforce-integrated quote form", body: "Request a Quote form posts to CRM and redirects to a /thank-you/ page so ad and analytics conversion tracking keeps working. The product name pre-fills from the ACF/WooCommerce product context. DEV NOTE: two options - (a) rebuild in Elementor Pro Forms with a webhook action to Salesforce Web-to-Lead (fewer plugins, styled natively in the builder), or (b) keep the existing Ninja Forms + Salesforce addon and restyle it. Prefer (a) unless the Salesforce field mapping proves complex; either way, re-test the /thank-you/ redirect and hidden UTM/GCLID fields after migration." },
   { n: 10, title: "Sticky mobile quote bar", body: "MOBILE-FIRST: on screens below lg, a bar fixed to the bottom of the viewport keeps 'Request a Quote' + 'Call' one thumb-tap away throughout the long spec page - B2B buyers on site visits often check specs from a phone next to the machine. At least 44px tap targets; hidden on desktop where the right-column conversion stack stays visible. Uses Hitachi Red for the primary action only." },
 ];
 
-/* Real values from ProductList-Marketing.xlsx - the three VOC 90 V pressure-variant
-   SKUs (rows in one table, not separate pages) plus the fixed-speed VOC 90 sibling. */
-const SPECS: Array<[string, string, string, string, string]> = [
-  ["Model / variant", "VOC 90 V · 7.5 bar (this page)", "VOC 90 V · 10 bar", "VOC 90 V · 13 bar", "VOC 90 (fixed speed)"],
-  ["Part number", "1004-3878", "1004-3888", "1004-3879", "1004-3885 / -3887"],
-  ["Motor power (kW / HP)", "90 / 125", "90 / 125", "90 / 125", "90 / 125"],
-  ["Free air delivery (L/s · cfm)", "279 · 591", "239 · 505", "206 · 437", "206-279 · 437-591"],
-  ["Max pressure (bar)", "7.5", "10", "13", "7.5 / 10 / 13"],
-  ["Capacity control", "VSD", "VSD", "VSD", "Spiral Valve"],
-  ["Start type", "VSD", "VSD", "VSD", "Wye-Delta"],
-  ["IP rating / ambient", "IP54 · 50°C", "IP54 · 50°C", "IP54 · 50°C", "IP65 · 50°C"],
-  ["Noise level dB(A)", "73", "73", "73", "73"],
-  ["Dimensions L×W×H (mm)", "1995×1300×1970", "1995×1300×1970", "1995×1300×1970", "1995×1300×1970"],
-  ["Weight (kg)", "1,950", "1,950", "1,950", "1,850"],
-  ["Air outlet", "2\" BSP", "2\" BSP", "2\" BSP", "2\" BSP"],
-  ["Lubrication / cooling", "Sullube · Air cooled", "Sullube · Air cooled", "Sullube · Air cooled", "Sullube · Air cooled"],
-  ["Controller / connectivity", "Colour touchscreen · AirLinx", "Colour touchscreen · AirLinx", "Colour touchscreen · AirLinx", "Colour touchscreen · AirLinx"],
+/* ACF PRO FRIENDLY SHAPE (real values from ProductList-Marketing.xlsx).
+   Pattern A: shared model specs as grouped label:value pairs. Each group below maps
+   to one ACF Group field holding plain named sub fields, so the editor sees a normal
+   form and the template renders a simple 2-column list. No matrix, no transposition. */
+const SPEC_GROUPS: Array<{ group: string; acf: string; rows: Array<[string, string]> }> = [
+  {
+    group: "Performance",
+    acf: "spec_performance",
+    rows: [
+      ["Motor power (kW / HP)", "90 / 125"],
+      ["Free air delivery (L/s)", "279"],
+      ["Free air delivery (cfm)", "591"],
+      ["Max pressure (bar)", "7.5"],
+      ["Noise level dB(A)", "73"],
+    ],
+  },
+  {
+    group: "Motor and drive",
+    acf: "spec_drive",
+    rows: [
+      ["Capacity control", "VSD"],
+      ["Start type", "VSD"],
+      ["Drive type", "Direct drive"],
+      ["IP rating", "IP54"],
+      ["Max ambient", "50 degrees C"],
+    ],
+  },
+  {
+    group: "Physical",
+    acf: "spec_physical",
+    rows: [
+      ["Length (mm)", "1995"],
+      ["Width (mm)", "1300"],
+      ["Height (mm)", "1970"],
+      ["Weight (kg)", "1,950"],
+      ["Air outlet", '2" BSP'],
+    ],
+  },
+  {
+    group: "Controls and fluids",
+    acf: "spec_controls",
+    rows: [
+      ["Controller", "Colour touchscreen"],
+      ["Connectivity", "AirLinx remote monitoring"],
+      ["Lubricant", "Sullube"],
+      ["Cooling", "Air cooled"],
+      ["Warranty", "5 year airend"],
+    ],
+  },
+];
+
+/* Pattern B: the pressure variants as an ACF Repeater. ONE ROW PER VARIANT, so the
+   template is a single `while (have_rows('variants'))` loop writing <tr> elements.
+   Only the attributes that actually differ between variants live here. */
+const VARIANT_COLUMNS = ["Variant", "Part number", "Max pressure (bar)", "FAD (L/s)", "FAD (cfm)", "Capacity control"];
+const VARIANTS: Array<{ cells: string[]; current?: boolean }> = [
+  { cells: ["VOC 90 V", "1004-3878", "7.5", "279", "591", "VSD"], current: true },
+  { cells: ["VOC 90 V", "1004-3888", "10", "239", "505", "VSD"] },
+  { cells: ["VOC 90 V", "1004-3879", "13", "206", "437", "VSD"] },
+  { cells: ["VOC 90 (fixed speed)", "1004-3885", "7.5", "279", "591", "Spiral Valve"] },
+  { cells: ["VOC 90 (fixed speed)", "1004-3887", "10", "239", "505", "Spiral Valve"] },
 ];
 
 function scrollToId(id: string) {
@@ -203,30 +248,90 @@ export default function ProductPage() {
         <section id="wf-specs" className="relative border-t px-4 lg:px-8 py-10 bg-secondary/40 scroll-mt-16">
           <Note n={5} />
           <p className="wf-kicker mb-1">Specifications</p>
-          <h3 className="font-bold text-xl mb-5">VOCV 45-90 series - full specification</h3>
-          <div className="overflow-x-auto" data-no-lorem>
-            <table className="w-full border bg-card text-[13px]">
-              <tbody>
-                {SPECS.map((row, ri) => (
-                  <tr key={ri} className={ri === 0 ? "bg-foreground text-background" : ri % 2 ? "bg-secondary/50" : ""}>
-                    {row.map((cell, ci) => (
-                      <td
-                        key={ci}
-                        className={`border px-4 py-2.5 ${ci === 0 ? "font-medium w-56" : "text-center"} ${
-                          ri === 0 ? "font-mono text-[11px] uppercase tracking-wide" : ""
-                        } ${ci === 1 && ri !== 0 ? "bg-primary/10 font-semibold" : ""}`}
-                      >
-                        {cell}
-                      </td>
-                    ))}
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-          <p className="font-mono text-[10px] text-muted-foreground mt-2">
-            Highlighted column = SKU being viewed. All values are real, from ProductList-Marketing.xlsx (JetEngine meta fields); the three pressure-variant SKUs of the VOC 90 V live as columns in one table - not separate pages - with the fixed-speed sibling for comparison.
+          <h3 className="font-bold text-xl mb-1">VOC 90 V specifications</h3>
+          <p className="text-sm text-muted-foreground mb-5 max-w-2xl">
+            Grouped label and value pairs. Each panel is one ACF Group field holding plain
+            named sub fields, so editors fill in an ordinary form and the template renders a
+            simple two column list.
           </p>
+
+          <div className="grid md:grid-cols-2 gap-4" data-no-lorem>
+            {SPEC_GROUPS.map((g) => (
+              <div key={g.group} className="border bg-card">
+                <div className="flex items-baseline justify-between gap-3 border-b px-4 py-2.5 bg-secondary/60">
+                  <p className="font-semibold text-[13px]">{g.group}</p>
+                  <code className="font-mono text-[10px] text-muted-foreground">{g.acf}</code>
+                </div>
+                <dl className="divide-y">
+                  {g.rows.map(([label, value]) => (
+                    <div key={label} className="flex justify-between gap-4 px-4 py-2.5 text-[13px]">
+                      <dt className="text-muted-foreground">{label}</dt>
+                      <dd className="font-medium text-right">{value}</dd>
+                    </div>
+                  ))}
+                </dl>
+              </div>
+            ))}
+          </div>
+
+          <div className="relative mt-8 pt-6 border-t">
+            <Note n={11} />
+            <p className="wf-kicker mb-1">Variants in this series</p>
+            <h4 className="font-bold text-lg mb-1">Compare pressure variants</h4>
+            <p className="text-sm text-muted-foreground mb-4 max-w-2xl">
+              One row per variant instead of one column. This is exactly how an ACF Repeater
+              loops, so the build is a single loop and the number of variants can differ from
+              model to model without touching the template.
+            </p>
+            <div className="overflow-x-auto" data-no-lorem>
+              <table className="w-full border bg-card text-[13px]">
+                <thead>
+                  <tr className="bg-foreground text-background">
+                    {VARIANT_COLUMNS.map((c) => (
+                      <th
+                        key={c}
+                        className="border px-4 py-2.5 text-left font-mono text-[11px] uppercase tracking-wide font-normal whitespace-nowrap"
+                      >
+                        {c}
+                      </th>
+                    ))}
+                    <th className="border px-4 py-2.5 text-left font-mono text-[11px] uppercase tracking-wide font-normal">
+                      Quote
+                    </th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {VARIANTS.map((v) => (
+                    <tr key={v.cells[1]} className={v.current ? "bg-primary/10 font-semibold" : ""}>
+                      {v.cells.map((cell, ci) => (
+                        <td key={ci} className="border px-4 py-2.5 whitespace-nowrap">
+                          {cell}
+                          {ci === 0 && v.current ? (
+                            <span className="font-mono text-[10px] text-primary ml-2">this page</span>
+                          ) : null}
+                        </td>
+                      ))}
+                      <td className="border px-4 py-2.5">
+                        <span className="font-mono text-[10px] text-primary underline whitespace-nowrap">Select</span>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+            <p className="font-mono text-[10px] text-muted-foreground mt-2">
+              Highlighted row = the SKU being viewed. Selecting a variant carries its part number into the quote form. All values real, from ProductList-Marketing.xlsx.
+            </p>
+          </div>
+
+          <div className="mt-6 border bg-card p-4" data-no-lorem>
+            <p className="font-semibold text-[13px] mb-1">Additional specifications (optional repeater)</p>
+            <p className="text-[13px] text-muted-foreground">
+              A simple ACF Repeater of label and value pairs catches the long tail of attributes
+              that only some models carry, so content entry is never blocked by a field that does
+              not exist yet.
+            </p>
+          </div>
         </section>
 
         {/* Features */}
