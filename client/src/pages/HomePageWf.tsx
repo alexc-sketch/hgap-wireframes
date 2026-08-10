@@ -11,13 +11,12 @@ import { useEffect, useState } from "react";
 import {
   KitShell,
   Note,
-  WfUtilityBar,
   WfFooter,
   ImgPh,
   SheetTitle,
   type NoteDef,
 } from "@/components/WireframeKit";
-import { WfMegaHeader } from "@/components/WfMegaMenu";
+import { WfGlobalHeader } from "@/components/WfMegaMenu";
 import {
   Activity,
   ArrowRight,
@@ -80,7 +79,7 @@ const SLIDES = [
 ];
 
 const NOTES: NoteDef[] = [
-  { n: 1, title: "Mega menu (functioning)", body: "Hover or click a nav item to open a full-width panel with multi-column link lists and a featured promo card. Structure comes straight from the client's WIP sitemap: All Products (configuration, air type, Our Brands), Solutions (Managed Air Power Service, AirLinx, Rental Fleet Solutions), Services & Parts, Industries (6), About Us (Branch Locations, Insights, Case Studies) and Careers. Keyboard: Escape closes; outside click closes. On mobile the same structure collapses into an accordion drawer behind the hamburger. GUTENBERG BUILD NOTE: the core Navigation block cannot do this alone, its submenus are single-column link lists. Two viable routes. (a) A custom Mega Menu block inserted into the core Navigation block, with each panel built as a template part in a registered Menu area and edited in the Site Editor. This is the pattern documented on the WordPress Developer Blog from 6.5 using the Interactivity API: full control, and marketing can edit panel content with blocks. Known limits: no vertical Navigation block support, limited mobile-overlay support, and panel width is restricted to full, wide or content as defined in theme.json (full width is exactly what this design wants). (b) A custom ACF Block for the whole header, rendered inside the header template part, with links managed in an ACF repeater: simplest way to match this wireframe exactly and the same PHP templating we use for the spec blocks, at the cost of editors not using the Navigation block UI. Because the mobile pattern here is an accordion drawer rather than the Navigation block overlay, route (a)'s main limitation does not bite. Panel width 100%, sharp corners, Hitachi Red active states only." },
+  { n: 1, title: "Global header: Hitachi group standard", body: "GLOBAL ELEMENT, identical on all seven templates. Rebuilt to the Hitachi group standard shared by hitachi.com/en-au and hitachienergy.com rather than a bespoke HGAP menu. Row 1, white: brand lockup left, then the utility items right in the group order, a region and language selector with a globe, a link out to Hitachi Global, Contact Us with a mail icon, and Search which expands a full width field. Utility items are plain text links, never buttons and never red. Row 2, grey band: the site identity wordmark left, main navigation right, and only the CURRENT section takes a solid Hitachi Red fill. The mega panel is a full width two pane drilldown: a left rail of second level categories where the selected item carries a red underline and a short red rule, and a right pane with the category heading and arrow, a descriptive paragraph, then the destination links. Nothing navigates until a right pane link is chosen, which is what makes the pattern read as considered rather than a link dump. One deliberate deviation from corporate: the 1300 number sits in the utility row as plain text, because it is a genuine commercial need with no corporate equivalent, and it replaces the old red CONTACT US button that the standard does not permit inside the nav row. GUTENBERG BUILD NOTE: the core Navigation block cannot produce a two pane drilldown, its submenus are single column lists. Build a custom ACF Block header rendered inside the header template part: a top level repeater, each row holding a category repeater with title, description and links. Same PHP templating as the product spec blocks, and it reproduces this layout exactly. Escape and outside click close the panel; on mobile the same structure collapses into an accordion drawer with 44px targets." },
   { n: 2, title: "Hero banner: full width carousel, four destinations", body: "FULL BLEED: the banner runs edge to edge, breaking out of the page container, with the copy panel overlaid on the image rather than sitting beside it. Four slides in the client-specified order, each routing to one destination: (1) Products, the range, (2) AirLinx remote monitoring, (3) Rental fleet solutions, (4) Servicing and parts solutions. Functional in this prototype: auto advance every 6s, pause on hover, arrows, dot indicators and a slide counter. Copy is influenced by the live Slider Revolution slides and the nav descriptions in the current page source, with the live em dash removed from the rental headline. The live 'offers and promotions' slide is not in the requested set; it can be added later as an optional fifth slide since the repeater has no fixed count. GUTENBERG BUILD NOTE: the live site uses Slider Revolution, a licensed plugin tied to The7 that carries a real performance cost. Rebuild it as a custom ACF Block with a 'slides' repeater (image, eyebrow, headline, subcopy, CTA label, CTA link) and full bleed achieved natively with alignfull support plus the theme.json layout settings, so no slider plugin is required. Load the first slide image eagerly for LCP and the rest lazily, respect prefers-reduced-motion, and make it swipeable on mobile. Overlay text needs a scrim on the image for contrast at every breakpoint." },
   { n: 3, title: "Intent router", body: "Three self-selection doors modelled on Atlas Copco: 'I need a compressor', 'I need service or parts' and 'I run a rental fleet'. The third door targets product rental companies buying portable compressors for their own fleets (HGAP does not offer rentals)." },
   { n: 4, title: "Product range", body: "The six agreed Products menu categories link into their category landing pages, the primary SEO landing routes. Counts are real SKU counts from ProductList-Marketing.xlsx. Stationary/Portable and Oil Flooded/Oil Free are two crossing taxonomies: a product appears in one of each pair without page duplication. Accessories SKU data still to be supplied." },
@@ -116,11 +115,8 @@ export default function HomePageWf() {
       <div className="wf-sheet overflow-hidden">
         <div className="relative">
           <Note n={10} />
-          <WfUtilityBar />
-          <div className="relative">
-            <Note n={1} className="!-top-1 !left-24" />
-            <WfMegaHeader />
-          </div>
+          <Note n={1} className="!-top-1 !left-24" />
+          <WfGlobalHeader />
         </div>
 
         {/* Hero banner: FULL WIDTH carousel, four destinations.

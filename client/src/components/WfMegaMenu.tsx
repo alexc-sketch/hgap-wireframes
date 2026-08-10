@@ -1,49 +1,72 @@
 /*
  * STYLE: Blueprint Studio wireframe kit, Hitachi-branded (ideas.md)
- * Functioning mega menu, sitemap-driven. Pattern: full-width panel under the
- * header, multi-column link lists, a featured promo card, hover + click +
- * keyboard open, mobile accordion fallback.
- * GUTENBERG BUILD: see Homepage annotation 1. Either a custom Mega Menu block
- * inside the core Navigation block with each panel as a Menu template part
- * (WP 6.5+ Interactivity API pattern), or a custom ACF Block header rendered in
- * the header template part. The core Navigation block alone cannot do this.
- * Structure driven by the client's WIP sitemap (pasted_content_3.txt):
- *   All Products / Solutions / Services & Parts / Industries / About Us / Careers
- * Sharp geometry (radius 0), Hitachi Red active states only, no gradients.
+ * GLOBAL HITACHI HEADER STANDARD. Rebuilt to match the group pattern shared by
+ * hitachi.com/en-au and hitachienergy.com, documented in
+ * /home/ubuntu/sitecheck/global_header_spec.md. Key points:
+ *   Row 1 (white)  brand lockup left; utility right in fixed order:
+ *                  globe + region/language, Global Network, mail + Contact Us,
+ *                  magnifier + Search that expands a full-width field.
+ *                  Utility items are plain text, never buttons, never red.
+ *   Row 2 (grey)   site identity left ("Global Air Power"), main nav right.
+ *                  ONLY the active top-level item takes a solid red fill.
+ *   Mega panel     full-width two-pane drilldown: left rail of second-level
+ *                  categories (selected = red underline + red rule), right pane
+ *                  shows heading + arrow, description paragraph, arrow links.
+ *                  Nothing navigates until a right-pane link is chosen.
+ * Deviation from corporate, deliberate: the HGAP phone number is a genuine
+ * commercial need with no corporate equivalent, so it sits in the utility row as
+ * plain text rather than as a red button.
+ * GUTENBERG BUILD: the core Navigation block cannot produce a two-pane
+ * drilldown (its submenus are single-column lists). Build a custom ACF Block
+ * header: top-level repeater, each row holding a category repeater with title,
+ * description and links. Same PHP templating as the product spec blocks.
+ * Sharp geometry (radius 0), no gradients.
  * NOTE: keep data-no-lorem so navigation stays English in lorem mode.
  */
 import { useEffect, useRef, useState } from "react";
 import {
   ArrowRight,
-  Box,
+  ArrowUpRight,
   ChevronDown,
-  Factory,
+  Globe,
+  Mail,
   Menu,
   Phone,
   Search,
-  Wifi,
   X,
 } from "lucide-react";
 
-interface MegaColumn {
-  heading: string;
-  links: { label: string; meta?: string }[];
+interface MegaLink {
+  label: string;
+  meta?: string;
+  external?: boolean;
+}
+
+/** Second-level category: the unit that fills the right pane. */
+interface MegaCategory {
+  label: string;
+  blurb: string;
+  links: MegaLink[];
 }
 
 interface NavEntry {
   label: string;
-  columns?: MegaColumn[];
-  promo?: { kicker: string; title: string; copy: string; cta: string };
-  simple?: string[];
+  overview?: string;
+  categories?: MegaCategory[];
 }
 
-/* Sitemap-driven nav model (client WIP sitemap, typos corrected) */
+/* Nav model: client WIP sitemap content, restructured into the Hitachi
+   two-pane shape (parent overview + second-level categories). */
 const NAV: NavEntry[] = [
   {
     label: "All Products",
-    columns: [
+    overview:
+      "Stationary and portable air compressors from five brands, 150 models across 44 series, sold and serviced Australia wide.",
+    categories: [
       {
-        heading: "By configuration",
+        label: "By configuration",
+        blurb:
+          "Choose by how the machine is installed and used: fixed plant room duty, or towable units for site and rental work.",
         links: [
           { label: "Stationary Air Compressors", meta: "217 SKUs" },
           { label: "Portable Air Compressors", meta: "33 SKUs" },
@@ -51,180 +74,261 @@ const NAV: NavEntry[] = [
         ],
       },
       {
-        heading: "By air type",
+        label: "By air type",
+        blurb:
+          "Oil flooded suits general industrial duty. Oil free is specified where air purity is critical, such as food, pharmaceutical and electronics.",
         links: [
-          { label: "Oil Flooded", meta: "165 SKUs (re-title of Oil Injected)" },
+          { label: "Oil Flooded", meta: "165 SKUs" },
           { label: "Oil Free Air Compressors", meta: "85 SKUs" },
         ],
       },
       {
-        heading: "Our Brands",
+        label: "Our Brands",
+        blurb:
+          "Five brands under Hitachi Group ownership, supported by one national service and parts network.",
         links: [
-          { label: "Hitachi", meta: "Oil free technology" },
+          { label: "Hitachi", meta: "Oil free scroll and screw" },
           { label: "Sullair", meta: "Industrial and portable" },
           { label: "Champion", meta: "Workshop and trade" },
           { label: "Bebicon", meta: "Piston compressors" },
-          { label: "Air-One", meta: "Entry-level screw" },
+          { label: "Air-One", meta: "Entry level screw" },
         ],
       },
+      {
+        label: "Browse the catalogue",
+        blurb:
+          "Filter the full range by pressure, motor power, flow, brand and air type to shortlist models before enquiring.",
+        links: [{ label: "View all products", meta: "150 models, 44 series" }],
+      },
     ],
-    promo: {
-      kicker: "Featured",
-      title: "Browse the full catalogue",
-      copy: "150 models across 44 series, filterable by pressure, power and flow.",
-      cta: "View all products",
-    },
   },
   {
     label: "Solutions",
-    columns: [
+    overview:
+      "Ways to buy and manage compressed air beyond the machine itself, from monitoring to fully managed supply.",
+    categories: [
       {
-        heading: "Solutions",
+        label: "Managed Air Power Service",
+        blurb:
+          "Compressed air supplied as a utility. Hitachi owns and maintains the plant, you pay for the air you use.",
+        links: [{ label: "How managed air works" }, { label: "Request an assessment" }],
+      },
+      {
+        label: "AirLinx Remote Monitoring",
+        blurb:
+          "Cloud connected monitoring that surfaces live performance, raises fault alerts early and reports on energy use.",
         links: [
-          { label: "Managed Air Power Service", meta: "Compressed air as a utility" },
-          { label: "AirLinx Remote Monitoring", meta: "IoT platform, 112 ready SKUs" },
-          { label: "Rental Fleet Solutions", meta: "For rental companies" },
+          { label: "Explore AirLinx", meta: "112 AirLinx ready SKUs" },
+          { label: "Book a demonstration" },
         ],
       },
+      {
+        label: "Rental Fleet Solutions",
+        blurb:
+          "For rental companies building their own hire fleets: portable diesel units, fleet pricing and parts support.",
+        links: [{ label: "Fleet pricing enquiry" }, { label: "Portable range" }],
+      },
     ],
-    promo: {
-      kicker: "AirLinx",
-      title: "See your whole fleet in one dashboard",
-      copy: "Live performance, fault alerts and energy reporting on every connected compressor.",
-      cta: "Explore AirLinx",
-    },
   },
-  { label: "Services & Parts", simple: [] },
+  {
+    label: "Services & Parts",
+    overview:
+      "Factory trained technicians, genuine parts held in Australia and planned maintenance across 22 locations.",
+    categories: [
+      {
+        label: "Service",
+        blurb:
+          "24/7 breakdown response, scheduled servicing and compressed air audits delivered by Hitachi employed technicians.",
+        links: [{ label: "Book a service" }, { label: "Planned maintenance plans" }],
+      },
+      {
+        label: "Parts",
+        blurb:
+          "Genuine OEM parts and consumables for all five brands, held ex stock in Australia to keep plant running.",
+        links: [{ label: "Order parts" }, { label: "Lubricants and filtration" }],
+      },
+    ],
+  },
   {
     label: "Industries",
-    columns: [
+    overview:
+      "Compressed air specified for the operating conditions, air quality and duty cycles of each sector.",
+    categories: [
       {
-        heading: "Industries",
-        links: [
-          { label: "Agriculture" },
-          { label: "Construction" },
-          { label: "Food & Beverage" },
-        ],
+        label: "Heavy industry",
+        blurb:
+          "High duty cycles, dust and heat. Reliability and serviceability outrank first cost in these sectors.",
+        links: [{ label: "Mining" }, { label: "Construction" }, { label: "Manufacturing" }],
       },
       {
-        heading: "\u00a0",
-        links: [
-          { label: "Manufacturing" },
-          { label: "Mining" },
-          { label: "Pharmaceutical" },
-        ],
+        label: "Clean air critical",
+        blurb:
+          "Sectors where oil carryover is unacceptable and air quality is audited against a standard.",
+        links: [{ label: "Food & Beverage" }, { label: "Pharmaceutical" }],
+      },
+      {
+        label: "Primary industry",
+        blurb:
+          "Remote sites, variable power and long service intervals define the requirement.",
+        links: [{ label: "Agriculture" }, { label: "View all industries" }],
       },
     ],
-    promo: {
-      kicker: "Industry expertise",
-      title: "Compressed air engineered for your sector",
-      copy: "Application guides and case studies for six core Australian industries.",
-      cta: "View all industries",
-    },
   },
   {
     label: "About Us",
-    columns: [
+    overview:
+      "Part of Hitachi Industrial Equipment Systems, operating in Australia through a national branch and service network.",
+    categories: [
       {
-        heading: "About Us",
+        label: "Company",
+        blurb:
+          "Who we are, our place in Hitachi Group and how the Australian business is structured.",
         links: [
-          { label: "Branch Locations", meta: "6 across Australia" },
-          { label: "Insights", meta: "Articles and guides" },
-          { label: "Case Studies", meta: "31 in the library" },
+          { label: "About Hitachi Global Air Power" },
+          { label: "Hitachi Group", external: true },
         ],
+      },
+      {
+        label: "Branch Locations",
+        blurb:
+          "Sales, service and parts coverage across Australia, with technicians based in each region.",
+        links: [{ label: "Find your nearest branch", meta: "6 branches, 22 locations" }],
+      },
+      {
+        label: "Insights",
+        blurb:
+          "Technical guides, application advice and company news from the knowledge hub.",
+        links: [{ label: "All insights" }, { label: "Case Studies" }],
       },
     ],
   },
-  { label: "Careers", simple: [] },
+  { label: "Careers" },
 ];
 
+/* ---- Full-width two-pane mega panel (Hitachi group pattern) ---- */
 function MegaPanel({ entry, onClose }: { entry: NavEntry; onClose: () => void }) {
-  if (!entry.columns) return null;
-  const iconFor = (label: string) =>
-    label === "All Products" ? Box : label === "Industries" ? Factory : Wifi;
-  const Icon = iconFor(entry.label);
+  const [sel, setSel] = useState(0);
+  useEffect(() => setSel(0), [entry.label]);
+  if (!entry.categories) return null;
+  const cat = entry.categories[sel];
   return (
     <div
       className="absolute left-0 right-0 top-full z-50 border-b-2 border-foreground bg-card shadow-[0_16px_32px_-16px_rgba(0,0,0,0.25)] animate-in fade-in slide-in-from-top-1 duration-150"
       role="region"
       aria-label={`${entry.label} menu`}
     >
-      <div className="grid lg:grid-cols-[1fr_280px]">
-        <div
-          className={`grid gap-x-8 gap-y-6 px-4 lg:px-8 py-7 ${
-            entry.columns.length >= 3 ? "sm:grid-cols-3" : entry.columns.length === 2 ? "sm:grid-cols-2" : ""
-          }`}
-        >
-          {entry.columns.map((col) => (
-            <div key={col.heading}>
-              <p className="font-mono text-[10px] uppercase tracking-[0.14em] text-muted-foreground border-b pb-2 mb-3">
-                {col.heading}
-              </p>
-              <ul className="space-y-0.5">
-                {col.links.map((l) => (
-                  <li key={l.label}>
-                    <a
-                      className="group flex items-start gap-2 px-2 py-2 -mx-2 hover:bg-secondary transition-colors duration-150 cursor-pointer"
-                      onClick={onClose}
-                    >
-                      <ArrowRight className="w-3.5 h-3.5 mt-0.5 text-primary opacity-0 group-hover:opacity-100 transition-opacity duration-150 flex-none" />
-                      <span>
-                        <span className="block text-[13.5px] font-medium leading-snug">
-                          {l.label}
-                        </span>
-                        {l.meta && (
-                          <span className="block font-mono text-[10px] uppercase text-muted-foreground mt-0.5">
-                            {l.meta}
-                          </span>
-                        )}
-                      </span>
-                    </a>
-                  </li>
-                ))}
-              </ul>
-            </div>
-          ))}
+      <div className="grid lg:grid-cols-[minmax(240px,1fr)_2fr] min-h-[280px]">
+        {/* LEFT RAIL: second-level categories */}
+        <div className="bg-secondary/70 border-r py-6 px-4 lg:pl-8">
+          <a className="block text-[15px] font-bold underline underline-offset-4 decoration-2 pb-3 cursor-pointer" onClick={onClose}>
+            {entry.label}
+          </a>
+          <ul>
+            {entry.categories.map((c, i) => (
+              <li key={c.label}>
+                <button
+                  onMouseEnter={() => setSel(i)}
+                  onFocus={() => setSel(i)}
+                  onClick={() => setSel(i)}
+                  aria-current={i === sel}
+                  className={`group flex w-full items-center gap-3 py-2.5 text-left text-[13.5px] transition-colors duration-150 ${
+                    i === sel
+                      ? "text-primary font-semibold"
+                      : "text-foreground/75 hover:text-foreground"
+                  }`}
+                >
+                  <span
+                    className={
+                      i === sel
+                        ? "underline decoration-primary decoration-2 underline-offset-[6px]"
+                        : ""
+                    }
+                  >
+                    {c.label}
+                  </span>
+                  {/* short red rule that runs to the pane edge, as on hitachi.com */}
+                  <span
+                    className={`ml-auto h-px w-10 bg-primary transition-opacity duration-150 ${
+                      i === sel ? "opacity-100" : "opacity-0"
+                    }`}
+                  />
+                </button>
+              </li>
+            ))}
+          </ul>
         </div>
-        {entry.promo && (
-          <div className="hidden lg:flex flex-col justify-between bg-foreground text-background p-6">
-            <div>
-              <p className="font-mono text-[10px] uppercase tracking-[0.14em] text-background/60 mb-2 flex items-center gap-2">
-                <Icon className="w-3.5 h-3.5" /> {entry.promo.kicker}
-              </p>
-              <p className="font-bold text-lg leading-snug">{entry.promo.title}</p>
-              <p className="text-[12.5px] text-background/70 mt-2 leading-relaxed">
-                {entry.promo.copy}
-              </p>
-            </div>
-            <span className="inline-flex items-center gap-2 bg-primary text-primary-foreground font-bold text-[12px] px-4 py-2.5 mt-5 self-start">
-              {entry.promo.cta} <ArrowRight className="w-3.5 h-3.5" />
-            </span>
-          </div>
-        )}
+
+        {/* RIGHT PANE: heading, description, destination links */}
+        <div key={cat.label} className="py-7 px-4 lg:px-10 animate-in fade-in duration-150">
+          <a
+            className="inline-flex items-center gap-2 text-[19px] font-bold hover:text-primary transition-colors duration-150 cursor-pointer"
+            onClick={onClose}
+          >
+            {cat.label} <ArrowRight className="w-4 h-4" />
+          </a>
+          <p className="text-[13px] text-muted-foreground leading-relaxed mt-3 max-w-[62ch]">
+            {cat.blurb}
+          </p>
+          <ul className="mt-6 space-y-1">
+            {cat.links.map((l) => (
+              <li key={l.label}>
+                <a
+                  className="group inline-flex items-baseline gap-2 py-2 cursor-pointer"
+                  onClick={onClose}
+                >
+                  <span className="text-[14px] font-semibold group-hover:text-primary transition-colors duration-150">
+                    {l.label}
+                  </span>
+                  {l.external ? (
+                    <ArrowUpRight className="w-3.5 h-3.5 self-center text-muted-foreground" />
+                  ) : (
+                    <ArrowRight className="w-3.5 h-3.5 self-center text-muted-foreground group-hover:text-primary transition-colors duration-150" />
+                  )}
+                  {l.meta && (
+                    <span className="font-mono text-[10px] uppercase text-muted-foreground">
+                      {l.meta}
+                    </span>
+                  )}
+                </a>
+              </li>
+            ))}
+          </ul>
+          {entry.overview && (
+            <p className="mt-7 pt-4 border-t font-mono text-[10px] uppercase tracking-[0.12em] text-muted-foreground max-w-[70ch]">
+              {entry.overview}
+            </p>
+          )}
+        </div>
       </div>
     </div>
   );
 }
 
-/** Header with a functioning mega menu (desktop) and
- *  accordion drawer (mobile). Drop-in replacement for WfHeader on pages
- *  that demo the final navigation. */
-export function WfMegaHeader({ active }: { active?: string }) {
+/**
+ * WfGlobalHeader: the Hitachi group standard header. Two rows plus a full-width
+ * two-pane mega panel. Used as the single global header on EVERY template.
+ * `active` takes a top-level nav label so the current section shows the red fill.
+ */
+export function WfGlobalHeader({ active }: { active?: string }) {
   const [open, setOpen] = useState<string | null>(null);
   const [drawer, setDrawer] = useState(false);
   const [mobileOpen, setMobileOpen] = useState<string | null>(null);
+  const [searchOpen, setSearchOpen] = useState(false);
   const wrapRef = useRef<HTMLElement>(null);
   const closeTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
 
-  /* close on outside click / Escape */
   useEffect(() => {
     const onDoc = (e: MouseEvent) => {
-      if (wrapRef.current && !wrapRef.current.contains(e.target as Node)) setOpen(null);
+      if (wrapRef.current && !wrapRef.current.contains(e.target as Node)) {
+        setOpen(null);
+        setSearchOpen(false);
+      }
     };
     const onKey = (e: KeyboardEvent) => {
       if (e.key === "Escape") {
         setOpen(null);
         setDrawer(false);
+        setSearchOpen(false);
       }
     };
     document.addEventListener("mousedown", onDoc);
@@ -249,18 +353,65 @@ export function WfMegaHeader({ active }: { active?: string }) {
     <header
       ref={wrapRef}
       data-no-lorem
-      className="relative border-b bg-card sticky top-11 z-40"
+      className="relative bg-card z-40"
       onMouseLeave={leave}
       onMouseEnter={() => closeTimer.current && clearTimeout(closeTimer.current)}
     >
-      <div className="flex items-center gap-4 px-4 lg:px-8 h-16 min-h-[64px]">
+      {/* ROW 1: brand + utility. White. Utility is plain text, never red. */}
+      <div className="flex items-center gap-4 px-4 lg:px-8 h-14 min-h-[56px] border-b">
         <div className="flex flex-col justify-center flex-none leading-none">
           <span className="hitachi-mark text-[19px]">HITACHI</span>
-          <span className="hitachi-wordmark text-[9.5px] mt-0.5">GLOBAL AIR POWER</span>
+          <span className="hitachi-wordmark text-[8.5px] mt-0.5">INSPIRE THE NEXT</span>
         </div>
-        <nav className="hidden lg:flex items-center gap-0.5 ml-4" aria-label="Main">
+        <div className="ml-auto flex items-center gap-4 lg:gap-6 text-[11.5px] text-foreground/75">
+          <span className="hidden md:flex items-center gap-1.5">
+            <Globe className="w-3.5 h-3.5" /> Australia / EN
+            <ChevronDown className="w-3 h-3 opacity-50" />
+          </span>
+          <a className="hidden lg:inline hover:text-primary transition-colors duration-150 cursor-pointer">
+            Hitachi Global
+          </a>
+          <a className="hidden sm:flex items-center gap-1.5 hover:text-primary transition-colors duration-150 cursor-pointer">
+            <Phone className="w-3.5 h-3.5" /> 1300 266 773
+          </a>
+          <a className="flex items-center gap-1.5 hover:text-primary transition-colors duration-150 cursor-pointer">
+            <Mail className="w-3.5 h-3.5" /> Contact Us
+          </a>
+          <button
+            className="flex items-center gap-1.5 hover:text-primary transition-colors duration-150"
+            onClick={() => setSearchOpen((s) => !s)}
+            aria-expanded={searchOpen}
+          >
+            {searchOpen ? <X className="w-3.5 h-3.5" /> : <Search className="w-3.5 h-3.5" />}
+            <span className="hidden sm:inline">Search</span>
+          </button>
+        </div>
+      </div>
+
+      {/* Expanding full-width search, as on the corporate sites */}
+      {searchOpen && (
+        <div className="border-b bg-secondary/60 px-4 lg:px-8 py-4 animate-in fade-in slide-in-from-top-1 duration-150">
+          <div className="flex items-center gap-2 max-w-3xl">
+            <input
+              autoFocus
+              placeholder="Search within Hitachi Global Air Power"
+              className="flex-1 border bg-card px-3 h-11 text-[13px] outline-none focus:border-primary"
+            />
+            <button className="bg-foreground text-background text-[12px] font-bold px-5 h-11">
+              SEARCH
+            </button>
+          </div>
+        </div>
+      )}
+
+      {/* ROW 2: site identity + main nav. Grey band. Active item = red fill. */}
+      <div className="flex items-center gap-4 px-4 lg:px-8 h-12 min-h-[48px] bg-secondary/70 border-b">
+        <a className="hitachi-wordmark text-[11px] flex-none cursor-pointer">
+          GLOBAL AIR POWER
+        </a>
+        <nav className="hidden lg:flex items-center ml-auto h-full" aria-label="Main">
           {NAV.map((item) => {
-            const hasPanel = !!item.columns;
+            const hasPanel = !!item.categories;
             const isOpen = open === item.label;
             const isActive = active === item.label;
             return (
@@ -270,48 +421,40 @@ export function WfMegaHeader({ active }: { active?: string }) {
                 onClick={() => setOpen(isOpen ? null : hasPanel ? item.label : null)}
                 aria-expanded={isOpen}
                 aria-haspopup={hasPanel}
-                className={`flex items-center gap-1 text-[13px] font-medium px-2.5 py-2 whitespace-nowrap transition-colors duration-150 ${
+                className={`flex items-center gap-1 h-full px-4 text-[13px] whitespace-nowrap transition-colors duration-150 ${
                   isOpen || isActive
-                    ? "text-primary border-b-2 border-primary font-bold"
-                    : "text-foreground/80 hover:text-foreground"
+                    ? "bg-primary text-primary-foreground font-bold"
+                    : "text-foreground/80 hover:text-foreground font-medium"
                 }`}
               >
                 {item.label}
                 {hasPanel && (
                   <ChevronDown
-                    className={`w-3 h-3 opacity-50 transition-transform duration-150 ${isOpen ? "rotate-180" : ""}`}
+                    className={`w-3 h-3 opacity-60 transition-transform duration-150 ${isOpen ? "rotate-180" : ""}`}
                   />
                 )}
               </button>
             );
           })}
         </nav>
-        <div className="ml-auto flex items-center gap-2.5">
-          <span className="hidden md:flex items-center justify-center w-11 h-11 border">
-            <Search className="w-4 h-4 text-muted-foreground" />
-          </span>
-          <span className="bg-primary text-primary-foreground text-[13px] font-bold tracking-wide px-4 py-3 min-h-[44px] flex items-center">
-            CONTACT US
-          </span>
-          <button
-            className="lg:hidden flex items-center justify-center w-11 h-11 border"
-            onClick={() => setDrawer((d) => !d)}
-            aria-label="Menu"
-            aria-expanded={drawer}
-          >
-            {drawer ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
-          </button>
-        </div>
+        <button
+          className="lg:hidden ml-auto flex items-center gap-2 h-11 px-3 border bg-card text-[12px] font-semibold"
+          onClick={() => setDrawer((d) => !d)}
+          aria-label="Menu"
+          aria-expanded={drawer}
+        >
+          {drawer ? <X className="w-4 h-4" /> : <Menu className="w-4 h-4" />} MENU
+        </button>
       </div>
 
       {/* Desktop mega panel */}
       {openEntry && <MegaPanel entry={openEntry} onClose={() => setOpen(null)} />}
 
-      {/* Mobile accordion drawer */}
+      {/* Mobile: same structure collapsed into an accordion drawer */}
       {drawer && (
-        <div className="lg:hidden border-t bg-card animate-in fade-in slide-in-from-top-1 duration-150">
+        <div className="lg:hidden border-b bg-card animate-in fade-in slide-in-from-top-1 duration-150">
           {NAV.map((item) => {
-            const hasKids = !!item.columns;
+            const hasKids = !!item.categories;
             const isOpen = mobileOpen === item.label;
             return (
               <div key={item.label} className="border-b last:border-b-0">
@@ -328,17 +471,15 @@ export function WfMegaHeader({ active }: { active?: string }) {
                   )}
                 </button>
                 {isOpen &&
-                  item.columns!.map((col) => (
-                    <div key={col.heading} className="px-4 pb-3">
-                      {col.heading.trim() && (
-                        <p className="font-mono text-[10px] uppercase tracking-[0.14em] text-muted-foreground py-1.5">
-                          {col.heading}
-                        </p>
-                      )}
-                      {col.links.map((l) => (
+                  item.categories!.map((c) => (
+                    <div key={c.label} className="px-4 pb-3">
+                      <p className="font-mono text-[10px] uppercase tracking-[0.14em] text-muted-foreground py-1.5">
+                        {c.label}
+                      </p>
+                      {c.links.map((l) => (
                         <a
                           key={l.label}
-                          className="block px-2 py-2.5 text-[13.5px] border-l-2 border-border hover:border-primary hover:bg-secondary min-h-[44px] flex items-center"
+                          className="flex items-center px-2 py-2.5 text-[13.5px] border-l-2 border-border hover:border-primary hover:bg-secondary min-h-[44px]"
                         >
                           {l.label}
                         </a>
@@ -348,12 +489,20 @@ export function WfMegaHeader({ active }: { active?: string }) {
               </div>
             );
           })}
-          <div className="flex items-center gap-2 px-4 py-3.5 bg-secondary/60">
-            <Phone className="w-4 h-4 text-primary" />
-            <span className="text-[13px] font-bold">1300 266 773</span>
+          <div className="flex items-center gap-4 px-4 py-3.5 bg-secondary/60 text-[12px]">
+            <span className="flex items-center gap-1.5">
+              <Phone className="w-3.5 h-3.5 text-primary" /> 1300 266 773
+            </span>
+            <span className="flex items-center gap-1.5">
+              <Globe className="w-3.5 h-3.5" /> Australia / EN
+            </span>
           </div>
         </div>
       )}
     </header>
   );
 }
+
+/* Back-compat alias: the homepage imported WfMegaHeader before the header
+   became global. Kept so older imports keep working. */
+export const WfMegaHeader = WfGlobalHeader;

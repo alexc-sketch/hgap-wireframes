@@ -144,78 +144,26 @@ export function KitShell({
 
 /* ---------------- Wireframed HGAP site chrome ---------------- */
 
+/* GLOBAL HEADER. The bespoke WfUtilityBar / WfHeader pair has been retired: it
+   mixed brand, utility and navigation in ways the Hitachi group standard does not
+   permit (dark utility strip, red CONTACT US button inside the nav row, no
+   region selector). Both names now re-export the single compliant global header
+   from WfGlobalHeader so every template renders identical chrome.
+   Spec: /home/ubuntu/sitecheck/global_header_spec.md */
+export { WfGlobalHeader } from "./WfMegaMenu";
+import { WfGlobalHeader as GlobalHeader } from "./WfMegaMenu";
+
+/** Retired: the global header now owns the utility row. Renders nothing so
+ *  templates that still call it do not double up the brand row. */
 export function WfUtilityBar() {
-  return (
-    <div data-no-lorem className="flex items-center justify-between px-4 lg:px-8 h-9 bg-[#2d2d2d] text-white/80 text-[11px]">
-      <span className="flex items-center gap-1.5">
-        <span className="hitachi-mark text-[12px] !text-white">HITACHI</span>
-        <span className="text-white/50">Inspire the Next · Group corporate strip</span>
-      </span>
-      <div className="flex items-center gap-5">
-        <a className="flex items-center gap-1 font-semibold text-white">
-          <Phone className="w-3 h-3" /> 1300 266 773
-        </a>
-        <span className="hidden md:flex items-center gap-1">
-          <MapPin className="w-3 h-3" /> Branch Locations (6 AU)
-        </span>
-      </div>
-    </div>
-  );
+  return null;
 }
 
+/** Back-compat wrapper: maps the old active values onto global nav labels. */
 export function WfHeader({ active }: { active?: "products" | "industries" }) {
-  // Live-site nav labels + new Industries entry (approved IA change)
-  const nav = [
-    "Products",
-    "Industries",
-    "Solutions",
-    "Services and Parts",
-    "Branch Locations",
-    "Insights",
-  ];
-  const activeLabel =
-    active === "products" ? "Products" : active === "industries" ? "Industries" : null;
-  return (
-    <header data-no-lorem className="relative border-b bg-card sticky top-11 z-40">
-      <div className="flex items-center gap-4 px-4 lg:px-8 h-16 min-h-[64px]">
-        {/* Brand lockup: HITACHI mark leads (red), wordmark subordinate (never red) */}
-        <div className="flex flex-col justify-center flex-none leading-none">
-          <span className="hitachi-mark text-[19px]">HITACHI</span>
-          <span className="hitachi-wordmark text-[9.5px] mt-0.5">
-            GLOBAL AIR POWER
-          </span>
-        </div>
-        <nav className="hidden lg:flex items-center gap-0.5 ml-4">
-          {nav.map((item) => (
-            <span
-              key={item}
-              className={`flex items-center gap-1 text-[13px] font-medium px-2.5 py-2 whitespace-nowrap ${
-                item === activeLabel
-                  ? "text-primary border-b-2 border-primary font-bold"
-                  : "text-foreground/80"
-              }`}
-            >
-              {item}
-              <ChevronDown className="w-3 h-3 opacity-50" />
-            </span>
-          ))}
-        </nav>
-        <div className="ml-auto flex items-center gap-2.5">
-          <span className="hidden md:flex items-center justify-center w-11 h-11 border">
-            <Search className="w-4 h-4 text-muted-foreground" />
-          </span>
-          {/* Live-site CTA label, kept identical (uppercase) */}
-          <span className="bg-primary text-primary-foreground text-[13px] font-bold tracking-wide px-4 py-3 min-h-[44px] flex items-center">
-            CONTACT US
-          </span>
-          {/* Mobile-first: hamburger ≥44px tap target below lg */}
-          <span className="lg:hidden flex items-center justify-center w-11 h-11 border">
-            <Menu className="w-5 h-5" />
-          </span>
-        </div>
-      </div>
-    </header>
-  );
+  const label =
+    active === "products" ? "All Products" : active === "industries" ? "Industries" : undefined;
+  return <GlobalHeader active={label} />;
 }
 
 /* Minimal global newsletter strip: rendered above the footer on every template.

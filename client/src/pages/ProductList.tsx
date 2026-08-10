@@ -10,8 +10,7 @@ import { PRODUCT_MODELS, type ProductModel } from "@/lib/productData";
 import {
   KitShell,
   Note,
-  WfUtilityBar,
-  WfHeader,
+  WfGlobalHeader,
   WfFooter,
   ImgPh,
   SheetTitle,
@@ -170,10 +169,9 @@ export default function ProductList() {
       />
 
       <div className="wf-sheet overflow-hidden">
-        <WfUtilityBar />
         <div className="relative">
           <Note n={1} className="!-top-1 !left-2" />
-          <WfHeader active="products" />
+          <WfGlobalHeader active="All Products" />
         </div>
 
         {/* Hero */}

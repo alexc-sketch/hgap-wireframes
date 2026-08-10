@@ -7,8 +7,7 @@ import {
   KitShell,
   Note,
   type NoteDef,
-  WfUtilityBar,
-  WfHeader,
+  WfGlobalHeader,
   WfFooter,
   ImgPh,
   SheetTitle,
@@ -71,8 +70,7 @@ export default function IndustryArchive() {
         desc="Hub page routing buyers by application. One tile per term in the shared Industry taxonomy — the same tags powering the product filter and homepage tiles."
       />
       <div className="wf-sheet overflow-hidden">
-        <WfUtilityBar />
-        <WfHeader active="industries" />
+        <WfGlobalHeader active="Industries" />
 
         {/* 1 · Hero */}
         <section className="relative border-b">

@@ -8,8 +8,7 @@ import {
   KitShell,
   Note,
   type NoteDef,
-  WfUtilityBar,
-  WfHeader,
+  WfGlobalHeader,
   WfFooter,
   ImgPh,
   SheetTitle,
@@ -59,8 +58,7 @@ export default function IndustryPage() {
         desc="Repeats for all 6 industries. Challenges → recommended ranges → pre-filtered products → industry case study, all driven by the shared Industry taxonomy."
       />
       <div className="wf-sheet overflow-hidden">
-        <WfUtilityBar />
-        <WfHeader active="industries" />
+        <WfGlobalHeader active="Industries" />
 
         {/* Breadcrumb */}
         <div className="px-4 lg:px-8 py-2.5 border-b font-mono text-[11px] text-muted-foreground">

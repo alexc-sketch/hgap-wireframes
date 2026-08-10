@@ -10,8 +10,7 @@
 import {
   KitShell,
   Note,
-  WfUtilityBar,
-  WfHeader,
+  WfGlobalHeader,
   WfFooter,
   ImgPh,
   SheetTitle,
@@ -111,8 +110,7 @@ export default function BrandPage() {
       />
 
       <div className="wf-sheet overflow-hidden">
-        <WfUtilityBar />
-        <WfHeader />
+        <WfGlobalHeader active="All Products" />
 
         {/* Breadcrumb */}
         <div className="border-b px-4 lg:px-8 py-3 bg-secondary/60">
