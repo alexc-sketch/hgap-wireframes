@@ -33,43 +33,55 @@ import {
   Wrench,
 } from "lucide-react";
 
-/* Hero carousel slides: product-category focus per client. 4 slides:
-   1 value prop + 3 top categories. NOTE: HGAP does NOT offer rentals;
-   rental content is a campaign targeting product rental companies (buyers). */
+/* Hero banner: FULL WIDTH (full bleed, edge to edge) carousel with the four
+   client-specified destinations, in order:
+     1. Products (the range)
+     2. AirLinx remote monitoring
+     3. Rental fleet solutions
+     4. Servicing and parts solutions
+   Slide copy and CTA labels are influenced by the live site (Slider Revolution
+   slides and nav descriptions in the page source), with the live em dash in the
+   rental headline removed per the client rule.
+   NOTE: HGAP does NOT rent equipment. The rental slide targets hire and rental
+   companies buying compressors for their own fleets. */
 const SLIDES = [
   {
-    kicker: "Sullair, Champion and Hitachi: one Australian partner",
-    headline: "Put your air compressor in expert hands with Hitachi Global Air Power",
-    copy: "Industrial and portable compressors, air treatment and 24/7 service from 6 local branches, backed by the global Hitachi Group.",
+    kicker: "Products",
+    headline: "Put your air compressor in expert hands",
+    copy: "Designed and engineered to excel in Australian conditions. Stationary, portable, oil flooded and oil free compressors across 150 models and 258 SKUs, from Sullair, Champion, Hitachi, Bebicon and Air-One.",
     ctas: ["View all products", "CONTACT US"],
-    media: "Slide 1 media: facility image / brand video (16:9)",
+    target: "/products/",
+    media: "Slide 1 media: product range hero, compressor lineup (full bleed 21:9)",
   },
   {
-    kicker: "Product category: stationary",
-    headline: "Stationary air compressors from 1.5 to 355 kW, fixed speed and VSD",
-    copy: "The deepest range in the catalogue (217 SKUs): oil flooded screw, oil free screw, scroll and piston across Champion, Sullair and Hitachi.",
+    kicker: "AirLinx remote monitoring",
+    headline: "AirLinx real time confidence, built in",
+    copy: "Catch early warning signs, prevent emergency breakdowns and lower your energy costs. 112 SKUs in the current range are AirLinx ready.",
     ctas: ["Find out more", "CONTACT US"],
-    media: "Slide 2 media: stationary compressor plant room hero shot",
+    target: "/airlinx-remote-monitoring-system/",
+    media: "Slide 2 media: AirLinx dashboard on tablet in plant room (full bleed 21:9)",
   },
   {
-    kicker: "Product category: portable",
-    headline: "Portable diesel compressors built for Australian conditions",
-    copy: "185 to 1550 cfm CAT-powered range (33 SKUs) for construction, mining and rental fleets.",
+    kicker: "Rental fleet solutions",
+    headline: "The right rental fleet does not just work hard, it pays back",
+    copy: "Power your rental fleet with world class equipment. Portable diesel compressors from 185 to 1550 cfm, built for high utilisation and fast turnaround between hires.",
     ctas: ["Find out more", "CONTACT US"],
-    media: "Slide 3 media: portable compressor on site",
+    target: "/hire-and-rental/",
+    media: "Slide 3 media: portable fleet lined up on site (full bleed 21:9)",
   },
   {
-    kicker: "Product category: oil free",
-    headline: "Oil free air compressors for critical applications",
-    copy: "85 oil free SKUs: DSP screw, SRL scroll and Bebicon piston for food and beverage, pharmaceutical and electronics.",
-    ctas: ["Find out more", "CONTACT US"],
-    media: "Slide 4 media: oil free compressor / clean facility",
+    kicker: "Servicing and parts solutions",
+    headline: "Keep your operations running with expert service and genuine parts",
+    copy: "Australia wide support and 24/7 service from 6 branches. Genuine parts for Sullair, Champion and Hitachi, service care plans and airend rebuilds.",
+    ctas: ["Find out more", "1300 266 773"],
+    target: "/services-and-parts/",
+    media: "Slide 4 media: technician servicing a compressor (full bleed 21:9)",
   },
 ];
 
 const NOTES: NoteDef[] = [
   { n: 1, title: "Mega menu (functioning)", body: "Hover or click a nav item to open a full-width panel with multi-column link lists and a featured promo card. Structure comes straight from the client's WIP sitemap: All Products (configuration, air type, Our Brands), Solutions (Managed Air Power Service, AirLinx, Rental Fleet Solutions), Services & Parts, Industries (6), About Us (Branch Locations, Insights, Case Studies) and Careers. Keyboard: Escape closes; outside click closes. On mobile the same structure collapses into an accordion drawer behind the hamburger. GUTENBERG BUILD NOTE: the core Navigation block cannot do this alone, its submenus are single-column link lists. Two viable routes. (a) A custom Mega Menu block inserted into the core Navigation block, with each panel built as a template part in a registered Menu area and edited in the Site Editor. This is the pattern documented on the WordPress Developer Blog from 6.5 using the Interactivity API: full control, and marketing can edit panel content with blocks. Known limits: no vertical Navigation block support, limited mobile-overlay support, and panel width is restricted to full, wide or content as defined in theme.json (full width is exactly what this design wants). (b) A custom ACF Block for the whole header, rendered inside the header template part, with links managed in an ACF repeater: simplest way to match this wireframe exactly and the same PHP templating we use for the spec blocks, at the cost of editors not using the Navigation block UI. Because the mobile pattern here is an accordion drawer rather than the Navigation block overlay, route (a)'s main limitation does not bite. Panel width 100%, sharp corners, Hitachi Red active states only." },
-  { n: 2, title: "Hero carousel: product category focus", body: "Functional in this prototype: 4 slides, auto-advance every 6s, pauses on hover, arrows and dot indicators. Slide 1 carries the value proposition; slides 2 to 4 each promote a top product category with real SKU counts from the client's product list. GUTENBERG BUILD NOTE: build as a custom ACF Block with the slides as an ACF repeater, rather than a slider plugin, so the markup stays lean and there is no Slider Revolution performance drag as on the current site. First slide loads eagerly for LCP, respects prefers-reduced-motion, swipeable on mobile." },
+  { n: 2, title: "Hero banner: full width carousel, four destinations", body: "FULL BLEED: the banner runs edge to edge, breaking out of the page container, with the copy panel overlaid on the image rather than sitting beside it. Four slides in the client-specified order, each routing to one destination: (1) Products, the range, (2) AirLinx remote monitoring, (3) Rental fleet solutions, (4) Servicing and parts solutions. Functional in this prototype: auto advance every 6s, pause on hover, arrows, dot indicators and a slide counter. Copy is influenced by the live Slider Revolution slides and the nav descriptions in the current page source, with the live em dash removed from the rental headline. The live 'offers and promotions' slide is not in the requested set; it can be added later as an optional fifth slide since the repeater has no fixed count. GUTENBERG BUILD NOTE: the live site uses Slider Revolution, a licensed plugin tied to The7 that carries a real performance cost. Rebuild it as a custom ACF Block with a 'slides' repeater (image, eyebrow, headline, subcopy, CTA label, CTA link) and full bleed achieved natively with alignfull support plus the theme.json layout settings, so no slider plugin is required. Load the first slide image eagerly for LCP and the rest lazily, respect prefers-reduced-motion, and make it swipeable on mobile. Overlay text needs a scrim on the image for contrast at every breakpoint." },
   { n: 3, title: "Intent router", body: "Three self-selection doors modelled on Atlas Copco: 'I need a compressor', 'I need service or parts' and 'I run a rental fleet'. The third door targets product rental companies buying portable compressors for their own fleets (HGAP does not offer rentals)." },
   { n: 4, title: "Product range", body: "The six agreed Products menu categories link into their category landing pages, the primary SEO landing routes. Counts are real SKU counts from ProductList-Marketing.xlsx. Stationary/Portable and Oil Flooded/Oil Free are two crossing taxonomies: a product appears in one of each pair without page duplication. Accessories SKU data still to be supplied." },
   { n: 5, title: "Our Brands", body: "HGAP's differentiator is the five-brand portfolio: Hitachi, Sullair, Champion, Bebicon and Air-One, all under Hitachi Group ownership. Each tile links to its own brand page." },
@@ -111,56 +123,78 @@ export default function HomePageWf() {
           </div>
         </div>
 
-        {/* Hero carousel */}
+        {/* Hero banner: FULL WIDTH carousel, four destinations.
+            Full bleed inside the wireframe sheet: no side padding, image spans
+            the whole width and the copy panel is overlaid on a scrim. */}
         <section
-          className="relative border-b bg-card"
+          className="relative border-b bg-foreground"
           onMouseEnter={() => setPaused(true)}
           onMouseLeave={() => setPaused(false)}
         >
           <Note n={2} />
-          <div className="grid lg:grid-cols-2">
-            <div key={slide} className="px-4 lg:px-8 py-12 flex flex-col justify-center animate-in fade-in slide-in-from-left-2 duration-300">
-              <span className="font-mono text-[10px] uppercase tracking-[0.14em] text-muted-foreground mb-3">
-                {cur.kicker}
-              </span>
-              <h2 className="font-bold text-4xl leading-tight max-w-lg">
-                {cur.headline}
-              </h2>
-              <p className="text-sm text-muted-foreground mt-4 max-w-md leading-relaxed">
-                {cur.copy}
-              </p>
-              <div className="flex flex-wrap gap-3 mt-7">
-                <span className="bg-primary text-primary-foreground font-semibold text-sm px-6 py-3.5">
-                  {cur.ctas[0]}
+
+          {/* Full width media layer */}
+          <div className="relative w-full min-h-[420px] lg:min-h-[520px]">
+            <ImgPh
+              key={cur.media}
+              label=""
+              className="absolute inset-0 !border-0 animate-in fade-in duration-300"
+            />
+            {/* Scrim so overlaid copy keeps contrast over any image */}
+            <div className="absolute inset-0 bg-gradient-to-r from-white/95 via-white/85 to-white/30 lg:to-transparent" />
+            {/* Media placeholder caption sits bottom right, clear of the copy panel */}
+            <span className="absolute bottom-4 left-4 lg:left-auto lg:right-14 z-10 max-w-[46%] font-mono text-[9px] uppercase tracking-wider text-muted-foreground bg-card/90 border px-2 py-1">
+              {cur.media}
+            </span>
+            <span className="hidden md:block absolute top-4 left-4 z-10 font-mono text-[9px] uppercase tracking-wider text-muted-foreground bg-card border px-2 py-1">
+              Full width banner / full bleed edge to edge
+            </span>
+
+            {/* Overlaid copy panel, constrained to a readable measure */}
+            <div className="relative z-10 px-6 lg:px-14 py-16 lg:py-24 max-w-3xl">
+              <div key={slide} className="animate-in fade-in slide-in-from-left-2 duration-300">
+                <span className="inline-flex items-center gap-2 font-mono text-[10px] uppercase tracking-[0.14em] bg-primary text-primary-foreground px-2.5 py-1.5 mb-5">
+                  {cur.kicker}
                 </span>
-                <span className="border font-medium text-sm px-6 py-3.5">
-                  {cur.ctas[1]}
+                <h2 className="font-bold text-4xl lg:text-5xl leading-[1.08] max-w-2xl">
+                  {cur.headline}
+                </h2>
+                <p className="text-sm lg:text-base text-muted-foreground mt-5 max-w-xl leading-relaxed">
+                  {cur.copy}
+                </p>
+                <div className="flex flex-wrap gap-3 mt-8">
+                  <span className="bg-primary text-primary-foreground font-semibold text-sm px-7 py-4">
+                    {cur.ctas[0]}
+                  </span>
+                  <span className="border-2 border-foreground bg-card font-medium text-sm px-7 py-4">
+                    {cur.ctas[1]}
+                  </span>
+                </div>
+                <span className="block font-mono text-[10px] uppercase tracking-wider text-muted-foreground mt-4">
+                  Slide links to {cur.target}
                 </span>
               </div>
-              <div className="flex flex-wrap items-center gap-5 mt-8 text-[12px] text-muted-foreground">
-                <span className="flex items-center gap-1.5">
-                  <ShieldCheck className="w-4 h-4" /> Hitachi Group company
-                </span>
-                <span className="flex items-center gap-1.5">
-                  <MapPin className="w-4 h-4" /> 6 AU branches
-                </span>
-                <span className="flex items-center gap-1.5">
-                  <Headset className="w-4 h-4" /> 24/7 support
-                </span>
-              </div>
-            </div>
-            <div className="relative min-h-72">
-              <ImgPh key={slide} label={cur.media} className="absolute inset-0 animate-in fade-in duration-300" />
-              {slide === 0 && (
-                <span className="absolute bottom-4 left-4 z-10 flex items-center gap-2 bg-foreground text-background font-mono text-[11px] uppercase px-3 py-2">
-                  <Play className="w-3.5 h-3.5" /> Watch: inside HGAP Australia
-                </span>
-              )}
             </div>
           </div>
 
+          {/* Trust strip under the banner, was inside the old split hero */}
+          <div className="relative z-10 border-t bg-card px-6 lg:px-14 py-3.5 flex flex-wrap items-center gap-6 text-[12px] text-muted-foreground">
+            <span className="flex items-center gap-1.5">
+              <ShieldCheck className="w-4 h-4" /> Hitachi Group company
+            </span>
+            <span className="flex items-center gap-1.5">
+              <MapPin className="w-4 h-4" /> 6 AU branches
+            </span>
+            <span className="flex items-center gap-1.5">
+              <Headset className="w-4 h-4" /> 24/7 support
+            </span>
+            <span className="hidden sm:flex items-center gap-1.5">
+              <Play className="w-3.5 h-3.5" /> Watch: inside HGAP Australia
+            </span>
+          </div>
+
           {/* Carousel controls */}
-          <div className="absolute bottom-4 right-4 z-10 flex items-center gap-3">
+          <div className="absolute bottom-16 right-4 lg:right-14 z-20 flex items-center gap-3">
             <button
               onClick={() => setSlide((s) => (s - 1 + SLIDES.length) % SLIDES.length)}
               className="border-2 border-foreground bg-card p-2 hover:bg-secondary"
@@ -169,11 +203,11 @@ export default function HomePageWf() {
               <ChevronLeft className="w-4 h-4" />
             </button>
             <div className="flex items-center gap-2 bg-card border-2 border-foreground px-3 py-2.5">
-              {SLIDES.map((_, i) => (
+              {SLIDES.map((s, i) => (
                 <button
                   key={i}
                   onClick={() => setSlide(i)}
-                  aria-label={`Go to slide ${i + 1}`}
+                  aria-label={`Go to slide ${i + 1}: ${s.kicker}`}
                   className={`h-2 transition-all duration-200 ${
                     i === slide ? "w-6 bg-primary" : "w-2 bg-muted-foreground/40"
                   }`}
@@ -188,7 +222,7 @@ export default function HomePageWf() {
               <ChevronRight className="w-4 h-4" />
             </button>
           </div>
-          <span className="absolute top-4 right-4 z-10 font-mono text-[9px] uppercase text-muted-foreground bg-card border px-2 py-1">
+          <span className="hidden md:block absolute top-4 right-4 z-20 font-mono text-[9px] uppercase text-muted-foreground bg-card border px-2 py-1">
             Slide {slide + 1}/{SLIDES.length} · auto 6s · hover = pause
           </span>
         </section>
