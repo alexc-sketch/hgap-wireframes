@@ -1,6 +1,6 @@
 /*
  * STYLE: Blueprint Studio wireframe kit (ideas.md)
- * Template 06 — Industry Archive (/industries/)
+ * Template 06: Industry Archive (/industries/)
  * Hub page listing all industries HGAP serves; routes buyers by application.
  */
 import {
@@ -54,11 +54,11 @@ const INDUSTRIES = [
 ];
 
 const NOTES: NoteDef[] = [
-  { n: 1, title: "Archive hero", body: "Positions HGAP as an application-led partner, not just a product catalogue. Sets up the self-selection journey: buyers think in terms of their industry before product taxonomy." },
-  { n: 2, title: "Industry tile grid", body: "One tile per industry term in the shared Industry taxonomy. Each tile shows a media slot, positioning line, the product families typically specified, and a live product count pulled from the taxonomy — proving depth without maintaining content manually." },
-  { n: 3, title: "How we work band", body: "Cross-industry proof of process (audit → specify → install → maintain). Reassures buyers whose industry isn't listed that HGAP still covers them, with a catch-all CTA." },
-  { n: 4, title: "Featured case study", body: "One flagship story (Dulux Merrifield) elevated at archive level; each industry page then carries its own. Social proof placed before the final CTA per conversion pattern." },
-  { n: 5, title: "SEO role", body: "/industries/ is a crawlable hub linking to 6 industry pages, each targeting 'air compressors for [industry]' queries — a keyword set the current site has no landing pages for." },
+  { n: 1, title: "Industries page template", body: "Build as page-industries.html with the global header and footer template parts locked. The hero, process band and final CTA are registered patterns, so the approved compositions can be reused without opening the layout." },
+  { n: 2, title: "Dynamic Industry term grid", body: "One server rendered dynamic block queries the Industry taxonomy. ACF term fields supply the tile image, short description and recommended product families; the product count comes from Product posts assigned to that term. The same term record powers this hub, the mega menu, homepage tiles and the Product Filter block." },
+  { n: 3, title: "How we work pattern", body: "Register the audit, specify, install and maintain band as a locked block pattern. Editors can change approved copy and links while the sequence, spacing and responsive behaviour remain controlled." },
+  { n: 4, title: "Featured Insight Query Loop", body: "Use a Query Loop filtered to a featured Industry Insight, with the post template registered once. This avoids a manually duplicated case study card and keeps the content source consistent." },
+  { n: 5, title: "Taxonomy and filter role", body: "The Industry taxonomy creates the six crawlable landing pages and also feeds the custom ACF Product Filter block. Links use the same query parameter contract, for example /products/?industry=mining, so archive navigation and filtering cannot drift apart." },
 ];
 
 export default function IndustryArchive() {
@@ -67,7 +67,7 @@ export default function IndustryArchive() {
       <SheetTitle
         code="Template 06 · /industries/"
         title="Industry Archive"
-        desc="Hub page routing buyers by application. One tile per term in the shared Industry taxonomy — the same tags powering the product filter and homepage tiles."
+        desc="Hub page routing buyers by application. One tile per term in the shared Industry taxonomy, using the same tags that power the product filter and homepage tiles."
       />
       <div className="wf-sheet overflow-hidden">
         <WfGlobalHeader active="Industries" />
@@ -82,7 +82,7 @@ export default function IndustryArchive() {
                 Compressed air, specified for your industry
               </h1>
               <p className="text-muted-foreground mt-4 max-w-md">
-                Positioning line — from mine sites to bottling lines, HGAP engineers
+                Positioning line: from mine sites to bottling lines, HGAP engineers
                 match Sullair, Champion and Hitachi air systems to the demands of
                 each application.
               </p>
@@ -92,7 +92,7 @@ export default function IndustryArchive() {
                 </span>
               </div>
             </div>
-            <ImgPh label="Archive hero media — split industry montage (mine site / production line)" className="min-h-[260px]" />
+            <ImgPh label="Archive hero media: split industry montage (mine site / production line)" className="min-h-[260px]" />
           </div>
         </section>
 
@@ -144,7 +144,7 @@ export default function IndustryArchive() {
             <div className="border bg-card p-6 max-w-xs">
               <p className="font-semibold text-sm">Industry not listed?</p>
               <p className="text-sm text-muted-foreground mt-1.5">
-                Catch-all line — our engineers spec air systems for any application.
+                Catch-all line: our engineers spec air systems for any application.
               </p>
               <span className="inline-flex items-center gap-1.5 text-sm font-semibold mt-3">
                 Contact an engineer <ChevronRight className="w-3.5 h-3.5" />
@@ -157,16 +157,16 @@ export default function IndustryArchive() {
         <section className="relative p-8 lg:p-12 border-b">
           <Note n={4} />
           <div className="grid lg:grid-cols-2 gap-8 items-center">
-            <ImgPh label="Case study media — Dulux Merrifield facility" className="min-h-[220px]" />
+            <ImgPh label="Case study media: Dulux Merrifield facility" className="min-h-[220px]" />
             <div>
               <p className="wf-kicker mb-2">Featured case study</p>
               <Quote className="w-6 h-6 text-primary mb-3" />
               <h2 className="font-bold text-xl leading-snug">
-                "Pull-quote from the Dulux Merrifield project — outcome-led, one
+                "Pull-quote from the Dulux Merrifield project: outcome-led, one
                 sentence."
               </h2>
               <p className="text-sm text-muted-foreground mt-3">
-                Supporting line — what was installed, the measurable result
+                Supporting line: what was installed, the measurable result
                 (uptime / energy saving), and the industry it belongs to.
               </p>
               <span className="inline-flex items-center gap-1.5 text-sm font-semibold mt-4">
@@ -176,12 +176,12 @@ export default function IndustryArchive() {
           </div>
         </section>
 
-        {/* Final CTA — centred */}
+        {/* Final CTA, centred */}
         <section className="relative p-10 lg:p-14 text-center border-b">
           <Note n={5} />
           <h2 className="font-bold text-2xl">Not sure where to start?</h2>
           <p className="text-muted-foreground mt-2 max-w-lg mx-auto">
-            Closing line — tell us your application and air demand, and we'll
+            Closing line: tell us your application and air demand, and we'll
             recommend the right system.
           </p>
           <div className="flex justify-center gap-3 mt-6">

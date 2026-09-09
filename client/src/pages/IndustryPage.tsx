@@ -1,6 +1,6 @@
 /*
  * STYLE: Blueprint Studio wireframe kit (ideas.md)
- * Template 07 — Industry Page (/industries/mining/), Mining & Resources example.
+ * Template 07: Industry Page (/industries/mining/), Mining & Resources example.
  * Repeats for all 6 industry terms. Pairs the shared Industry taxonomy with
  * case studies, recommended ranges and a pre-filtered product link.
  */
@@ -24,13 +24,13 @@ const CHALLENGES = [
 
 const RANGES = [
   {
-    name: "Portable / Diesel — 375–425 Series & 900H",
-    spec: "375–900 cfm · towable · Tier-rated diesel",
+    name: "Portable / Diesel: 375 to 425 Series & 900H",
+    spec: "375 to 900 cfm · towable · Tier-rated diesel",
     use: "Drilling, blasting, pipeline work on remote sites",
   },
   {
-    name: "Oil Flooded Screw — Sullair fixed speed & VSD",
-    spec: "5–500 kW · 6–13 bar · VSD options",
+    name: "Oil Flooded Screw: Sullair fixed speed & VSD",
+    spec: "5 to 500 kW · 6 to 13 bar · VSD options",
     use: "Fixed plant air for processing and workshops",
   },
   {
@@ -41,12 +41,12 @@ const RANGES = [
 ];
 
 const NOTES: NoteDef[] = [
-  { n: 1, title: "Industry hero", body: "Application-specific value proposition ('air compressors for mining') targeting the exact search query this page exists to rank for. Breadcrumb ties it back to the /industries/ hub." },
-  { n: 2, title: "Challenges → solutions", body: "Speaks the buyer's language before showing products: each mining pain point maps to an HGAP capability. Content differs per industry — this is what makes the template feel bespoke rather than templated." },
-  { n: 3, title: "Recommended ranges", body: "Not the full catalogue — the 2–3 product families this industry actually specifies, each linking to its category page. Driven editorially per industry, so specialists curate rather than dump products." },
-  { n: 4, title: "Pre-filtered product link", body: "Deep-links into the Product List with the Industry facet pre-applied (/products/?industry=mining) — the shared taxonomy at work. One tag on a product powers this page, the filter and the homepage tiles." },
-  { n: 5, title: "Industry case study", body: "Proof in context: a story from THIS industry, not generic testimonials. Case studies are tagged with the same Industry taxonomy, so this block auto-populates." },
-  { n: 6, title: "Explore other industries", body: "Quick links to the sibling industry pages keep buyers in the application-led journey and distribute internal link equity across all 6 pages." },
+  { n: 1, title: "Industry taxonomy template", body: "Build once as taxonomy-industry.html with the global header and footer template parts. The current term supplies the page title, breadcrumb and ACF term hero fields, so one template serves all six industries." },
+  { n: 2, title: "Challenges and solutions ACF Block", body: "A controlled ACF Block uses a challenge_solutions repeater with challenge, response and optional icon fields. Specialists tailor the content by Industry term while the responsive layout stays locked." },
+  { n: 3, title: "Curated product relationships", body: "An ACF Relationship field on the Industry term selects two or three recommended Product Series records. A dynamic block renders those relationships using the shared series card partial, rather than asking editors to recreate product cards." },
+  { n: 4, title: "Link to the ACF Product Filter", body: "The View Products action sends the current Industry term to /products/?industry=mining. The custom Product Filter block reads the same taxonomy parameter, builds its tax query and preserves the term in the shareable URL." },
+  { n: 5, title: "Related Industry Insight", body: "A Query Loop returns the latest Insight assigned to the current Industry term. The card template is shared with the Homepage and Industry archive." },
+  { n: 6, title: "Dynamic sibling term links", body: "A small server rendered block lists the other Industry taxonomy terms automatically. Editors do not maintain cross links by hand when a term is renamed or added." },
 ];
 
 export default function IndustryPage() {
@@ -54,7 +54,7 @@ export default function IndustryPage() {
     <KitShell page="industry" notes={NOTES}>
       <SheetTitle
         code="Template 07 · /industries/mining/"
-        title="Industry Page — Mining & Resources"
+        title="Industry Page: Mining & Resources"
         desc="Repeats for all 6 industries. Challenges → recommended ranges → pre-filtered products → industry case study, all driven by the shared Industry taxonomy."
       />
       <div className="wf-sheet overflow-hidden">
@@ -75,7 +75,7 @@ export default function IndustryPage() {
                 Air compressors for mining
               </h1>
               <p className="text-muted-foreground mt-4 max-w-md">
-                Value proposition — portable diesel air for the pit, fixed plant
+                Value proposition: portable diesel air for the pit, fixed plant
                 air for processing, and 24/7 support wherever the site is.
               </p>
               <div className="flex gap-3 mt-6">
@@ -87,7 +87,7 @@ export default function IndustryPage() {
                 </span>
               </div>
             </div>
-            <ImgPh label="Industry hero media — portable compressor on mine site (video slot)" className="min-h-[260px]" />
+            <ImgPh label="Industry hero media: portable compressor on mine site (video slot)" className="min-h-[260px]" />
           </div>
         </section>
 
@@ -156,11 +156,11 @@ export default function IndustryPage() {
               <p className="wf-kicker mb-2">Mining case study</p>
               <Quote className="w-6 h-6 text-primary mb-3" />
               <h2 className="font-bold text-xl leading-snug">
-                "Outcome-led pull quote from a mining client — uptime, fuel
+                "Outcome-led pull quote from a mining client: uptime, fuel
                 saving or response time."
               </h2>
               <p className="text-sm text-muted-foreground mt-3">
-                Supporting line — site, equipment installed, measurable result.
+                Supporting line: site, equipment installed, measurable result.
                 Auto-populated from case studies tagged 'Mining' in the shared
                 Industry taxonomy.
               </p>
@@ -168,15 +168,15 @@ export default function IndustryPage() {
                 Read the full story <ArrowRight className="w-3.5 h-3.5" />
               </span>
             </div>
-            <ImgPh label="Case study media — site photo" className="min-h-[220px]" />
+            <ImgPh label="Case study media: site photo" className="min-h-[220px]" />
           </div>
         </section>
 
-        {/* Final CTA — centred */}
+        {/* Final CTA, centred */}
         <section className="relative p-10 lg:p-14 text-center border-b">
           <h2 className="font-bold text-2xl">Spec air for your site</h2>
           <p className="text-muted-foreground mt-2 max-w-lg mx-auto">
-            Closing line — tell us the application, duty cycle and location;
+            Closing line: tell us the application, duty cycle and location;
             we'll recommend and price the right system.
           </p>
           <div className="flex justify-center gap-3 mt-6">
