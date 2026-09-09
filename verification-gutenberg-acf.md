@@ -7,3 +7,7 @@ Mobile verification covered the Product List and Homepage at 375 by 812. The pro
 Automated checks completed: TypeScript clean, diff check clean, and zero em or en dashes in every edited file.
 
 Interactive verification applied the Sullair brand facet. The result count changed from 150 to 74 models, the active filter chip appeared, the result cards remained Sullair products, and Clear All became available. This confirms the existing prototype interaction was preserved while the build architecture and labels changed.
+
+GitHub Pages verification repeated the same Sullair filter test on the published revision. The live result count changed from 150 to 74, confirming that the deployed bundle includes both the new implementation mapping and the existing filter behaviour.
+
+The published Cover displays the new Gutenberg and ACF Pro system summary before the template cards. The published Oil Free Category page identifies the shared ACF Product Filter block, the URL parameter contract and the Interactivity API update model, with no remaining reference to a separate faceting plugin.
