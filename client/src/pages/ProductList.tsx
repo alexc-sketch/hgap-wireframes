@@ -1,14 +1,15 @@
 /*
- * STYLE: Blueprint Studio wireframe (ideas.md)
- * 01 - Product List template. Grayscale blocks, radius 0, amber CTAs only.
+ * STYLE: Blueprint Studio wireframe kit, Hitachi brand system, sharp geometry.
+ * 01 - Product List template. Gutenberg archive template with one custom dynamic
+ * ACF Product Filter block owning the controls, query, results and pagination.
  * Interactive: filter checkboxes update result count, compare tray demo.
- * Section nav (quicklink) is NOT sticky per client rule.
  */
 import { useMemo, useState } from "react";
 import QuickQuoteModal from "@/components/QuickQuoteModal";
 import { PRODUCT_MODELS, type ProductModel } from "@/lib/productData";
 import {
   KitShell,
+  BuildLabel,
   Note,
   WfGlobalHeader,
   WfFooter,
@@ -53,6 +54,13 @@ const FACETS: Array<[string, string[]]> = [
   ["Connectivity", ["AirLinx remote monitoring (112 SKUs)"]],
 ];
 
+const FILTER_FIELD_MAP = [
+  ["Taxonomy", "product_configuration, product_air_type, product_brand"],
+  ["ACF Select", "drive_class"],
+  ["ACF Number", "max_pressure_bar, motor_power_kw, fad_cfm"],
+  ["ACF True / False", "airlinx_enabled"],
+] as const;
+
 /* Guided finder dropdown definitions - each option maps to a filter rule */
 const FINDER: Array<{ label: string; options: string[] }> = [
   { label: "1 · Application", options: ["Workshop / trades", "Continuous industrial", "Portable / site work", "Clean air (food, pharma)"] },
@@ -63,11 +71,11 @@ const FINDER: Array<{ label: string; options: string[] }> = [
 const SORTS = ["Relevance", "Power: low → high", "Power: high → low", "Flow: high → low", "Name A-Z"];
 
 const NOTES: NoteDef[] = [
-  { n: 1, title: "Global header + primary CTA", body: "Persistent 'CONTACT US' (live-site CTA label, Hitachi Red) is the #1 conversion action. Mega-menu routes by product type and industry (competitor pattern: Atlas Copco intent-based navigation). Header lockup follows Hitachi brand rules: HITACHI mark leads, 'Global Air Power' wordmark subordinate and never red." },
+  { n: 1, title: "Global header template part", body: "One locked header template part is shared by all templates. The custom interactive ACF header block supplies the two row Hitachi global pattern and the two pane mega menu. Menu content comes from ACF repeaters; layout and active state logic stay locked in the block template." },
   { n: 2, title: "Archive hero with live count", body: "H1 targets the head keyword ('Air Compressors Australia'). Counts now reflect the client's real catalogue: 258 SKUs across 150 models in 44 series (ProductList-Marketing.xlsx). Recommend product pages at MODEL level (~150 pages) with pressure-variant SKUs shown as rows in the spec table - not separate pages. Category sub-nav mirrors the agreed Products menu: All / Stationary / Portable / Oil Flooded / Oil Free / Accessories." },
   { n: 3, title: "Guided product finder", body: "3-step selector (application → air demand → power) for non-technical buyers, modelled on Sullair America's interactive guide. Functional in this prototype - pick options and 'Show matches' narrows the grid. In production each combination maps to a pre-filtered archive URL so results are shareable and indexable." },
-  { n: 4, title: "Faceted filter sidebar - real spec-sheet facets", body: "MOBILE-FIRST: below the lg breakpoint the sidebar collapses into a full-width drawer behind a 44px 'Filters' button showing the active-filter count - tap it in this prototype to see the drawer. EVERY FACET IS NOW DRIVEN BY THE CLIENT'S ProductList-Marketing.xlsx: all 150 models are loaded and every checkbox filters the live grid. TAXONOMY: products map on TWO AXES - Category (Stationary 109 / Portable 33 / OEM 8 models) and Air Type (Oil Flooded 84 / Oil Free 58). A VOC 90 is BOTH Stationary AND Oil Flooded, so these are two separate taxonomies, not one flat tree: the nav categories become landing pages while products cross-list without duplication. FACET SOURCES: Brand = BRANDING column (Sullair 74 / Champion 36 / Hitachi 36 / Bebicon 3 / Air-One 1 models); Drive = derived from CAPACITY CONTROLS + START TYPE (Fixed 86 / VSD 31) and engine-driven portables (33); Pressure and Power buckets from MAX PRESSURE (BAR) and MOTOR RATING (kW); Connectivity = the 112 AirLinx-equipped SKUs. ACCESSORIES: the Excel contains no accessories rows - the facet is shown greyed as 'data TBC' until the client supplies that list. OEM: the 8 bare-airend models are included under 'OEM Airends' pending a decision (include, separate, or exclude?). An INDUSTRY facet is recommended but requires tagging - the spreadsheet has no industry column, so each model needs industry terms assigned during content entry (one-off, then reused by homepage tiles and industry pages). GUTENBERG BUILD NOTE: per client direction the data layer is ACF or WooCommerce. Recommended: WooCommerce products in catalogue mode (no cart or checkout) with ACF field groups for the 30 spec columns, and categories and attributes as native Woo taxonomies. IMPORTANT CONSTRAINT: the core Query Loop block can render this grid and handle pagination, but it cannot do multi-facet front-end filtering on meta values by itself. This sidebar therefore needs a faceting plugin (FacetWP, Filter Everything or an equivalent) or a custom filter block, exactly as it would have under any builder. Choose one that delivers AJAX updates, live per-facet counts and clean indexable filter URLs such as /products/?brand=sullair. This is the single biggest build decision on this template, so settle it before content entry." },
-  { n: 5, title: "Product cards - all 150 real models", body: "Every card is a real model from the spec sheet, showing kW / cfm / bar (top of range) plus its series and how many pressure-variant SKUs roll up into the one page. Models load 24 at a time ('Load more') - in production this is AJAX pagination. Two actions: View Product (research) and Quick Quote (conversion). Quick Quote is functional in this prototype - click it to walk the full flow: pre-filled product context, a 5-field form (product, page URL, UTM and GCLID travel as hidden fields), AJAX submit → Salesforce Web-to-Lead, postcode-based branch routing, then a confirmation state that fires the GA4/Ads conversion event. No page reload, no re-typing the model name. Product context comes from the ACF or WooCommerce product record. GUTENBERG: render the card as an ACF Block used as the Query Loop post template, or as a custom post template within the Query Loop, so one card definition serves every listing on the site." },
+  { n: 4, title: "Custom ACF Product Filter block", body: "ACF PRO IS THE FILTER DATA LAYER. Products are Product posts with ACF field groups. Configuration, Air Type, Brand and Industry use taxonomies because they drive archive pages and cross linking. Drive uses an ACF Select field; power, pressure and flow use ACF Number fields; AirLinx uses an ACF True / False field. The archive contains one server rendered dynamic block that owns the filter form, results and pagination. Every control writes a sanitised GET parameter, so /products/?brand=sullair&air_type=oil-free is shareable and works without JavaScript. The block render callback converts taxonomy parameters into tax_query clauses and ACF parameters into WP_Query meta_query clauses, with NUMERIC comparisons for ranges. WordPress Interactivity API actions submit the same state in the background, replace results and counts, update browser history and announce the new result total. There is no FacetWP or Filter Everything dependency. ACF Pro stores and exposes the values; the custom block supplies the interface and query logic. On mobile the controls open in an accessible drawer with 44px targets. All current counts and options come from ProductList-Marketing.xlsx. Accessories stay disabled until data is supplied, and Industry becomes active after terms are assigned during content entry." },
+  { n: 5, title: "Product cards inside the filter block", body: "Every card is a real model from the spec sheet, showing kW, cfm and bar plus its series and the number of pressure variant SKUs. The Product Filter block renders one shared server side card partial for initial and interactive results, so markup never diverges. Models load 24 at a time and pagination preserves the filter query string. View Product supports research; Quick Quote carries the Product post ID, model, part number, page URL and campaign fields into the global Salesforce form. No duplicate content entry and no WooCommerce dependency is required." },
   { n: 6, title: "Compare tray", body: "Optional enhancement: select up to 3 models for a side-by-side spec table. Appears only when items are selected." },
   { n: 7, title: "Trust band (social proof)", body: "24/7 service, genuine OEM parts, 6 Australian branches - differentiators vs importers, per competitor gap analysis (CAPS / Pilot Air)." },
   { n: 8, title: "Related insights", body: "Feeds the 105-article Insights library into the buying journey for SEO internal linking." },
@@ -305,6 +313,21 @@ export default function ProductList() {
               )}
             </div>
 
+            <div className="mb-4 border border-[#b1000e]/35 bg-[#fff7f7] p-3">
+              <BuildLabel>Custom dynamic ACF Product Filter block</BuildLabel>
+              <p className="mt-2 text-[11px] leading-relaxed text-muted-foreground">
+                One block owns the GET form, query, results, counts and pagination.
+              </p>
+              <div className="mt-2 space-y-1.5">
+                {FILTER_FIELD_MAP.map(([type, fields]) => (
+                  <div key={type} className="grid grid-cols-[78px_1fr] gap-2 text-[9px] leading-relaxed">
+                    <strong className="font-mono uppercase text-foreground">{type}</strong>
+                    <code className="break-all text-muted-foreground">{fields}</code>
+                  </div>
+                ))}
+              </div>
+            </div>
+
             {activeFilters.length > 0 && (
               <div className="flex flex-wrap gap-1.5 mb-4">
                 {activeFilters.map((f) => (
@@ -358,18 +381,21 @@ export default function ProductList() {
           <div className="px-4 lg:px-6 py-6 bg-secondary/40">
             <div className="relative flex flex-wrap items-center justify-between gap-3 mb-5">
               <Note n={5} className="!-left-1" />
-              <p className="text-sm">
-                Showing{" "}
-                <strong>
-                  {sorted.length} of {PRODUCTS.length}
-                </strong>{" "}
-                models <span className="text-muted-foreground">(258 SKUs)</span>
-                {(activeFilters.length > 0 || finderActive) && (
-                  <span className="font-mono text-[11px] text-primary ml-2">
-                    ← live filter demo
-                  </span>
-                )}
-              </p>
+              <div>
+                <BuildLabel className="mb-2">Server rendered results region</BuildLabel>
+                <p className="text-sm">
+                  Showing{" "}
+                  <strong>
+                    {sorted.length} of {PRODUCTS.length}
+                  </strong>{" "}
+                  models <span className="text-muted-foreground">(258 SKUs)</span>
+                  {(activeFilters.length > 0 || finderActive) && (
+                    <span className="font-mono text-[11px] text-primary ml-2">
+                      ← URL state and ACF query preview
+                    </span>
+                  )}
+                </p>
+              </div>
               <div className="flex items-center gap-2">
                 <div className="relative">
                   <button

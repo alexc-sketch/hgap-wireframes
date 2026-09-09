@@ -5,7 +5,8 @@
  * Grayscale, radius 0. Sits between the homepage and the filtered product list.
  * Order: content, Insights, Final CTA (centred), FAQs, Newsletter (global), Footer.
  * COPY: real English, influenced by hitachiglobalairpower.au /products/oil-free/. No em dashes.
- * BUILD: Gutenberg block theme, ACF Pro fields, Query Loop plus a faceting plugin.
+ * BUILD: Gutenberg block theme, ACF Pro fields and links into the shared custom
+ * ACF Product Filter block. No separate faceting plugin.
  */
 import {
   KitShell,
@@ -32,7 +33,7 @@ const NOTES: NoteDef[] = [
   {
     n: 3,
     title: "Technology tiles",
-    body: "Splits 58 models by the technology a buyer actually chooses between: rotary screw, scroll, piston and portable. Each tile opens the product list with the air type and technology facets pre applied. A faceting plugin is required because the core Query Loop block cannot facet on meta values by itself.",
+    body: "Splits 58 models by the technology a buyer actually chooses between: rotary screw, scroll, piston and portable. Each tile links into the shared ACF Product Filter block with the air type and technology parameters already in the URL. The filter block builds the tax query and meta query server side, then the Interactivity API updates the result region without a full reload. No separate faceting plugin or duplicated category logic.",
   },
   {
     n: 4,

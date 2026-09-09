@@ -5,7 +5,8 @@
  * Order: content, Insights, Final CTA (centred), Newsletter (global), Footer.
  * COPY: real English, influenced by hitachiglobalairpower.au. No em dashes.
  * DATA: real figures from ProductList-Marketing.xlsx (74 Sullair models, 91 SKUs, 18 series).
- * BUILD: Gutenberg block theme, ACF Pro fields, Query Loop for the series and insights grids.
+ * BUILD: taxonomy-product_brand.html, ACF Pro term fields, dynamic catalogue
+ * blocks and a core Query Loop for related Insights.
  */
 import {
   KitShell,
@@ -21,23 +22,23 @@ import { ArrowRight, Award, ChevronRight, Globe, ShieldCheck } from "lucide-reac
 const NOTES: NoteDef[] = [
   {
     n: 1,
-    title: "Brand hero, ACF block",
-    body: "Brand logo, positioning headline and three proof chips as an ACF Block with fields brand_logo, brand_headline, brand_intro and a proof_points repeater. Header, footer and CTA colours stay global; brand personality lives in the page body only.",
+    title: "Brand taxonomy template and hero",
+    body: "Build once as taxonomy-product_brand.html. The current brand term supplies ACF fields brand_logo, brand_headline, brand_intro and a proof_points repeater to a server rendered hero block. The global header, footer and CTA colours remain locked; brand personality appears in the page body only.",
   },
   {
     n: 2,
     title: "Why buy the brand through HGAP",
-    body: "Narrative plus a live count band. The three figures read from the product taxonomy (models where brand = Sullair) rather than being typed by an editor, so they never go stale as the catalogue changes.",
+    body: "Narrative comes from ACF term fields. The model, SKU and series figures are calculated from Product posts assigned to the current product_brand term, rather than typed by an editor, so they stay current as the catalogue changes.",
   },
   {
     n: 3,
-    title: "Ranges by series, Query Loop",
-    body: "Core Query Loop filtered to brand = Sullair grouped by series taxonomy. Each tile deep links into the product list with the brand and series facets pre-applied. Counts shown are the real model counts from the spreadsheet.",
+    title: "Ranges by series, dynamic query block",
+    body: "A server rendered block queries Product posts for the current product_brand term and groups them by product_series. Each tile links into the shared ACF Product Filter block with brand and series parameters already in the URL. Counts are calculated from the catalogue, not maintained in page copy.",
   },
   {
     n: 4,
     title: "Signature technology block",
-    body: "One reusable synced pattern per brand. For Sullair the airend and its capacity control story. Keeps the page from reading as a plain product dump and gives the page an E-E-A-T anchor.",
+    body: "A controlled ACF Block reads technology_heading, technology_copy and technology_media from the current Brand term. For Sullair it tells the airend and capacity control story. One block template serves every brand while the content remains term specific.",
   },
   {
     n: 5,
@@ -47,12 +48,12 @@ const NOTES: NoteDef[] = [
   {
     n: 6,
     title: "Cross brand navigation",
-    body: "Explore strip to the other four brand pages so users stay inside the catalogue. Same template serves Hitachi, Champion, Bebicon and Air-One.",
+    body: "A small dynamic term navigation block lists the other four product_brand terms automatically, so users stay inside the catalogue and editors do not maintain sibling links manually.",
   },
   {
     n: 7,
     title: "Insights before the final CTA",
-    body: "Query Loop of posts tagged with this brand. Feeds SEO and expertise in the agreed component order: Insights, Final CTA, Newsletter, Footer.",
+    body: "A core Query Loop returns Insights assigned to the current product_brand term. The post template is registered once and the feed remains automatic. Order stays Insights, final CTA, newsletter and footer.",
   },
   {
     n: 8,

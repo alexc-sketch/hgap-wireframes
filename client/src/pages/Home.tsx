@@ -4,7 +4,7 @@
  * COPY: real English, no em dashes. Build stack is Gutenberg block theme plus ACF Pro.
  */
 import { Link } from "wouter";
-import { KitShell } from "@/components/WireframeKit";
+import { BuildLabel, KitShell } from "@/components/WireframeKit";
 import {
   ArrowRight,
   Award,
@@ -40,10 +40,28 @@ export default function Home() {
         </p>
         <p className="text-muted-foreground mt-3 max-w-2xl leading-relaxed">
           Build stack for the rebuild is a WordPress Gutenberg block theme with
-          ACF Pro for the product data, so each annotation names the blocks,
-          fields and patterns the developer needs rather than describing a
-          visual layout alone.
+          ACF Pro for the structured content and product filter data. A custom
+          dynamic Product Filter block turns those fields into shareable archive
+          queries. Each wireframe now maps its sections to templates, template
+          parts, patterns, Query Loops and ACF Blocks.
         </p>
+
+        <section data-no-lorem className="mt-8 border border-[#b1000e]/35 bg-[#fff7f7] p-5">
+          <BuildLabel>Gutenberg and ACF Pro system</BuildLabel>
+          <div className="mt-4 grid gap-px border bg-border sm:grid-cols-2 lg:grid-cols-4">
+            {[
+              ["Templates", "Control the page frame for archives, products and taxonomies."],
+              ["Template parts", "Keep the global header, mega menu, newsletter and footer in one place."],
+              ["Patterns and blocks", "Turn approved sections into reusable, controlled editor components."],
+              ["ACF Product Filter", "Reads ACF fields, builds the WordPress query and keeps filter state in the URL."],
+            ].map(([title, copy]) => (
+              <div key={title} className="bg-card p-4">
+                <h2 className="text-sm font-bold">{title}</h2>
+                <p className="mt-2 text-[12px] leading-relaxed text-muted-foreground">{copy}</p>
+              </div>
+            ))}
+          </div>
+        </section>
 
         <div className="grid md:grid-cols-2 gap-5 mt-10">
           <Link href="/product-list" className="group border-2 border-foreground p-6 hover:bg-secondary transition-colors duration-150 block">
@@ -51,9 +69,9 @@ export default function Home() {
             <p className="wf-kicker mb-1">Template 01</p>
             <h2 className="font-bold text-xl">Product List + Faceted Filters</h2>
             <p className="text-sm text-muted-foreground mt-2">
-              Archive of all products with live filter sidebar (brand, type,
-              drive, pressure, power, flow), guided finder, compare tray and
-              trust band.
+              Archive of all products with a live custom ACF Product Filter
+              block covering brand, type, drive, pressure, power and flow,
+              plus the guided finder and compare tray.
             </p>
             <span className="inline-flex items-center gap-2 font-mono text-[11px] uppercase tracking-wide mt-4 text-primary">
               Open wireframe <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform duration-150" />
